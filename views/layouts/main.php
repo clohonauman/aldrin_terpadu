@@ -99,6 +99,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                                 </ul>
                             </li>
                             <li class="nav-item">
+                                <a href="<?= Yii::$app->urlManager->createUrl(['/akg']) ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-line-chart"></i>
+                                    <p>Analisis Keb. Guru</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="<?= Yii::$app->urlManager->createUrl(['/logout']) ?>" class="nav-link">
                                     <i class="nav-icon fas fa-sign-out-alt"></i>
                                     <p>Keluar</p>
