@@ -54,6 +54,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                                     <p>Beranda</p>
                                 </a>
                             </li>
+                            <li class="nav-header"><hr></li>
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
                                     <i class="nav-icon fas fa-database"></i>
@@ -102,6 +103,19 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                                 <a href="<?= Yii::$app->urlManager->createUrl(['/akg']) ?>" class="nav-link">
                                     <i class="nav-icon fas fa-line-chart"></i>
                                     <p>Analisis Keb. Guru</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= Yii::$app->urlManager->createUrl(['/manajemen_pengguna']) ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-users-cog"></i>
+                                    <p>Manajemen Pengguna</p>
+                                </a>
+                            </li>
+                            <li class="nav-header"><hr></li>
+                            <li class="nav-item">
+                                <a href="<?= Yii::$app->urlManager->createUrl(['/profil']) ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    <p>Pengaturan Profil</p>
                                 </a>
                             </li>
                             <li class="nav-item">
