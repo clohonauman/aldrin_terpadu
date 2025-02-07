@@ -53,7 +53,7 @@ JS);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
     <head>
-        <title>ALDRIN TERPADU</title>
+        <title><?= Html::encode($this->title) ?> | <?= getenv('APP_NAME') ?></title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <?php $this->head() ?>
@@ -167,7 +167,6 @@ JS);
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1 class="m-0"><?= Html::encode($this->title) ?></h1>
                             </div>
                         </div>
                     </div>

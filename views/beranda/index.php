@@ -1,5 +1,6 @@
 <?php
 /** @var yii\web\View $this */
+$this->title='BERANDA';
 ?>
 <div class="card">
     <div class="card-header">
