@@ -73,8 +73,8 @@ JS);
             
             <!-- Sidebar -->
             <aside class="main-sidebar sidebar-dark-primary elevation-5">
-                <a href="#" class="brand-link text-center text-decoration-none">
-                    <span class="brand-text font-weight"><?= getenv('APP_NAME') ?></span>
+                <a href="#" class="brand-link text-center text-decoration-none p-0">
+                    <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
                 </a>
 
                 <div class="sidebar">
