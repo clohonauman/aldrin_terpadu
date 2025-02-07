@@ -51,6 +51,31 @@
                     </div>
                 </div>
             </div>
+            <!-- <div class="row">
+                <div class="table-responsive">
+                    <table id="myTable" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Alamat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Charlie</td>
+                                <td>charlie@example.com</td>
+                                <td>Manado</td>
+                            </tr>
+                            <tr>
+                                <td>Adi</td>
+                                <td>adi@example.com</td>
+                                <td>Jakarta</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> -->
         </section>
     </div>
 </div>

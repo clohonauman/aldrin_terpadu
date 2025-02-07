@@ -16,6 +16,38 @@ $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, 
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
+$this->registerCssFile('https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+$this->registerJsFile('https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+$this->registerJs(<<<JS
+$(document).ready(function () {
+    $('#myTable').DataTable({
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "responsive": true,
+        "language": {
+            "sProcessing":   "Sedang memproses...",
+            "sLengthMenu":   "Tampilkan _MENU_ data",
+            "sZeroRecords":  "Tidak ditemukan data yang sesuai",
+            "sInfo":         "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            "sInfoEmpty":    "Menampilkan 0 sampai 0 dari 0 data",
+            "sInfoFiltered": "(disaring dari _MAX_ data keseluruhan)",
+            "sSearch":       "Cari:",
+            "oPaginate": {
+                "sFirst":    "Awal",
+                "sPrevious": "Sebelumnya",
+                "sNext":     "Berikutnya",
+                "sLast":     "Akhir"
+            }
+        }
+    });
+});
+JS);
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
