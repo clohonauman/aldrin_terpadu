@@ -46,7 +46,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'GET beranda' => 'beranda/index', // Route ke Controller Beranda function Index
+                'GET /' => 'site/login', // Route ke Controller Beranda function Index
+                'GET /beranda' => 'beranda/index', // Route ke Controller Beranda function Index
             ],
         ],
     ],
