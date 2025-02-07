@@ -42,14 +42,13 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'GET beranda' => 'beranda/index', // Route ke Controller Beranda function Index
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
