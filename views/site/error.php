@@ -6,6 +6,7 @@
 /** @var Exception $exception */
 
 use yii\helpers\Html;
+$this->title=Html::encode($name);
 ?>
 <div class="d-flex align-items-center justify-content-center">
     <div class="text-center">
