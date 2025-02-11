@@ -42,14 +42,15 @@ $config = [
             ],
         ],
         'db' => $db,
-        // 'urlManager' => [
-        //     'enablePrettyUrl' => true,
-        //     'showScriptName' => false,
-        //     'rules' => [
-        //         'GET /' => 'site/login', // Route ke View Site file Login
-        //         'GET /beranda' => 'beranda/index', // Route ke View Beranda file Index
-        //     ],
-        // ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                'GET /' => 'site/login', // Route ke View Site file Login
+                'GET /beranda' => 'beranda/index', // Route ke View Beranda file Index
+                'ptk/upload' => 'ptk/upload',
+            ],
+        ],
     ],
     'params' => $params,
 ];
