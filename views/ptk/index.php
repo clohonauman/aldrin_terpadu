@@ -150,20 +150,20 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                             $no++;
                             ?>
                             <tr>
-                                <td><?= htmlspecialchars($no) ?></td>
-                                <td><?= htmlspecialchars($ptk['nama_sekolah']) ?></td>
-                                <td><?= htmlspecialchars($ptk['bentuk_pendidikan']) ?></td>
-                                <td><?= htmlspecialchars($ptk['status_sekolah']) ?></td>
-                                <td><?= htmlspecialchars($ptk['kecamatan']) ?></td>
+                                <td><?= htmlspecialchars($no ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['nama_sekolah'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['bentuk_pendidikan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['status_sekolah'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['kecamatan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
 
-                                <td><?= htmlspecialchars($ptk['nama']) ?></td>
-                                <td><?= htmlspecialchars($ptk['nik']) ?></td>
-                                <td><?= htmlspecialchars($ptk['nuptk']) ?></td>
-                                <td><?= htmlspecialchars($ptk['tanggal_lahir']) ?></td>
-                                <td><?= htmlspecialchars($ptk['usia_sekarang']) ?></td>
-                                <td><?= htmlspecialchars($ptk['status_kepegawaian']) ?></td>
-                                <td><?= htmlspecialchars($ptk['jabatan']) ?></td>
-                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'])) ?>"><i class="fa fa-eye"></i></a></td>
+                                <td><?= htmlspecialchars($ptk['nama'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['nik'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['nuptk'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['tanggal_lahir'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['usia_sekarang'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['status_kepegawaian'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($ptk['jabatan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
