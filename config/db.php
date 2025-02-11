@@ -2,9 +2,9 @@
 try {
     return [
         'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=' . getenv('DB_HOSTNAME') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_NAME'),
-        'username' => getenv('DB_USERNAME'),
-        'password' => getenv('DB_PASSWORD'),
+        'dsn' => 'mysql:host=' . 'localhost' . ';port=' .'3306' . ';dbname=' . 'db_aldrin',
+        'username' => 'root',
+        'password' => '',
         'charset' => 'utf8',
         // Schema cache options (for production environment)
         //'enableSchemaCache' => true,

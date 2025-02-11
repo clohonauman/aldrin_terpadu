@@ -68,7 +68,7 @@ class PtkController extends Controller
             return $this->render('detail', ['data' => $data]);
         }
     }
-      
+    
     public function actionUpload()
     {
         $model = new UploadForm();

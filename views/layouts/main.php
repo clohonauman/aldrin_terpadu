@@ -129,7 +129,7 @@ JS);
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?= Yii::$app->urlManager->createUrl(['/mata_pelajaran']) ?>" class="nav-link">
+                                        <a href="<?= Yii::$app->urlManager->createUrl(['/mapel']) ?>" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
                                             <p>Data Mata Pelajaran</p>
                                         </a>
