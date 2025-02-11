@@ -13,9 +13,13 @@ class PtkController extends Controller
 {
     public function actionIndex()
     {
+        $ptk_id = Yii::$app->request->get('id', ''); // Default value jika tidak ada 'ptk'
+        $ptk_id = \yii\helpers\Html::encode($ptk_id); // Mencegah XSS
+    
         $query = (new \yii\db\Query())
             ->select([
                 'ptk.*',
+                'sekolah.npsn',
                 'sekolah.nama AS nama_sekolah',
                 'sekolah.bentuk_pendidikan',
                 'sekolah.status_sekolah',
@@ -25,33 +29,46 @@ class PtkController extends Controller
             ->from('ptk')
             ->leftJoin('sekolah', 'sekolah.npsn = ptk.sekolah_id');
     
-        // Filter berdasarkan bentuk_pendidikan
-        if (!empty($_GET['bentuk_pendidikan'])) {
-            $query->andWhere(['sekolah.bentuk_pendidikan' => $_GET['bentuk_pendidikan']]);
+        if (empty($ptk_id)) {
+            // Filter berdasarkan bentuk_pendidikan
+            if (!empty(Yii::$app->request->get('bentuk_pendidikan'))) {
+                $query->andWhere(['sekolah.bentuk_pendidikan' => Yii::$app->request->get('bentuk_pendidikan')]);
+            }
+    
+            // Filter berdasarkan kecamatan
+            if (!empty(Yii::$app->request->get('kecamatan'))) {
+                $query->andWhere(['sekolah.kecamatan' => Yii::$app->request->get('kecamatan')]);
+            }
+
+            // Filter berdasarkan jenis kelamin
+            if (!empty(Yii::$app->request->get('jenis_kelamin'))) {
+                $query->andWhere(['ptk.jenis_kelamin' => Yii::$app->request->get('jenis_kelamin')]);
+            }
+    
+            // Filter berdasarkan waktu pensiun
+            if (!empty(Yii::$app->request->get('pensiun'))) {
+                $tahun_ke_depan = (int)Yii::$app->request->get('pensiun');
+                $usia_pensiun = 60; // Misalnya usia pensiun adalah 60 tahun
+                $tahun_sekarang = date('Y');
+    
+                // Menghitung tahun lahir maksimum yang akan mencapai usia pensiun dalam X tahun
+                $tahun_lahir_maks = $tahun_sekarang - ($usia_pensiun - $tahun_ke_depan);
+    
+                $query->andWhere(['<=', 'YEAR(ptk.tanggal_lahir)', $tahun_lahir_maks]);
+            }
+    
+            $data = $query->all();
+            return $this->render('index', ['data' => $data]);
+        } else {
+            // Filter berdasarkan ptk_id
+            $query->andWhere(['ptk.ptk_id' => $ptk_id]);
+    
+            $data = $query->one(); // Menggunakan `one()` karena detail seharusnya hanya satu data
+    
+            return $this->render('detail', ['data' => $data]);
         }
-    
-        // Filter berdasarkan kecamatan
-        if (!empty($_GET['kecamatan'])) {
-            $query->andWhere(['sekolah.kecamatan' => $_GET['kecamatan']]);
-        }
-    
-        // Filter berdasarkan waktu pensiun
-        if (!empty($_GET['pensiun'])) {
-            $tahun_ke_depan = (int)$_GET['pensiun'];
-            $usia_pensiun = 60; // Misalnya usia pensiun adalah 60 tahun
-            $tahun_sekarang = date('Y');
-    
-            // Menghitung tahun lahir minimum yang akan mencapai usia pensiun dalam X tahun
-            $tahun_lahir_maks = $tahun_sekarang - ($usia_pensiun - $tahun_ke_depan);
-    
-            $query->andWhere(['<=', 'YEAR(ptk.tanggal_lahir)', $tahun_lahir_maks]);
-        }
-    
-        $data = $query->all();
-    
-        return $this->render('index', ['data' => $data]);
     }
-    
+      
     public function actionUpload()
     {
         $model = new UploadForm();
@@ -106,7 +123,7 @@ class PtkController extends Controller
         }
 
         Yii::$app->session->setFlash('success', 'Data berhasil diunggah!');
-        return $this->redirect(['upload']);
+        return $this->redirect(['index']);
     }
 
     private function generateUuid()

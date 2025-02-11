@@ -5,6 +5,7 @@ $this->title = 'DATA PTK';
 // Ambil data filter dari tabel sekolah
 $bentukPendidikanList = Yii::$app->db->createCommand("SELECT DISTINCT bentuk_pendidikan FROM sekolah ORDER BY bentuk_pendidikan")->queryAll();
 $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM sekolah ORDER BY kecamatan")->queryAll();
+$jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")->queryAll();
 ?>
 
 <div class="card">
@@ -71,6 +72,20 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                     </div>
                     <div class="row">
                         <div class="col-md-4">
+                            <label><b>Jenis Kelamin</b></label>
+                            <select name="jenis_kelamin" class="form-control">
+                                <option value="">-- Pilih Jenis Kelamin --</option>
+                                <?php foreach ($jkList as $jk) : ?>
+                                    <option value="<?= htmlspecialchars($jk['jenis_kelamin']) ?>" 
+                                        <?= isset($_GET['jenis_kelamin']) && $_GET['jenis_kelamin'] == $jk['jenis_kelamin'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($jk['jenis_kelamin']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <label><b>PENSIUN DALAM ... (TAHUN)</b></label>
                             <select name="pensiun" class="form-control">
                                 <option value="">-- Pilih Tahun Kedepan --</option>
@@ -111,6 +126,8 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                 <table id="myTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
+                            <th>NO</th>
+
                             <th>SEKOLAH</th>
                             <th>BENTUK PENDIDIKAN</th>
                             <th>STATUS SEKOLAH</th>
@@ -123,11 +140,17 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                             <th>USIA SEKARANG</th>
                             <th>STATUS KEPEGAWAIAN</th>
                             <th>JABATAN</th>
+                            <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($data as $ptk): ?>
+                        <?php
+                            $no=0; 
+                            foreach ($data as $ptk): 
+                            $no++;
+                            ?>
                             <tr>
+                                <td><?= htmlspecialchars($no) ?></td>
                                 <td><?= htmlspecialchars($ptk['nama_sekolah']) ?></td>
                                 <td><?= htmlspecialchars($ptk['bentuk_pendidikan']) ?></td>
                                 <td><?= htmlspecialchars($ptk['status_sekolah']) ?></td>
@@ -140,6 +163,7 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                                 <td><?= htmlspecialchars($ptk['usia_sekarang']) ?></td>
                                 <td><?= htmlspecialchars($ptk['status_kepegawaian']) ?></td>
                                 <td><?= htmlspecialchars($ptk['jabatan']) ?></td>
+                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'])) ?>"><i class="fa fa-eye"></i></a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
