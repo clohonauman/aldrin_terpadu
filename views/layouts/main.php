@@ -22,6 +22,19 @@ $this->registerCssFile('https://cdn.datatables.net/1.11.5/css/jquery.dataTables.
 $this->registerJsFile('https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js', [
     'depends' => [\yii\web\JqueryAsset::class],
 ]);
+$this->registerCssFile('https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+$this->registerJsFile('https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+$this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+$this->registerJsFile('https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js', [
+    'depends' => [\yii\web\JqueryAsset::class],
+]);
+
 $this->registerJs(<<<JS
 $(document).ready(function () {
     $('#myTable').DataTable({
@@ -43,10 +56,20 @@ $(document).ready(function () {
                 "sNext":     "Berikutnya",
                 "sLast":     "Akhir"
             }
-        }
+        },
+        dom: 'Bfrtip', // Tambahkan tombol
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: 'Unduh Excel',
+                className: 'btn btn-success',
+                title: 'Data PTK'
+            }
+        ]
     });
 });
 JS);
+
 
 ?>
 <?php $this->beginPage() ?>
