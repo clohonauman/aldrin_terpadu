@@ -88,7 +88,7 @@ $statusList = Yii::$app->db->createCommand("SELECT DISTINCT status_sekolah FROM 
                     <h4><i class="fa fa-school"></i> DAFTAR SEKOLAH</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/upload']) ?>" class="btn btn-primary">
+                    <a href="<?= Yii::$app->urlManager->createUrl(['/sekolah/upload']) ?>" class="btn btn-primary">
                         <i class="fa fa-plus"></i> DATA
                     </a>
                 </div>
