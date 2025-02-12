@@ -21,17 +21,8 @@
         "bower-asset/datatables.net": "^2.2",
         "moonlandsoft/yii2-phpexcel": "^2.0",
         "phpoffice/phpspreadsheet": "^4.0",
-<<<<<<< HEAD
-        "kartik-v/yii2-widget-fileinput": "^1.1"
-=======
-        "vlucas/phpdotenv": "^5.6",
-        "2amigos/yii2-table-export-widget": "^1.0",
-        "fedemotta/yii2-widget-datatables": "^1.3",
-        "kartik-v/yii2-grid": "dev-master",
-        "yiisoft/yii2-bootstrap4": "^2.0",
-        "kartik-v/yii2-widgets": "^3.4",
-        "kartik-v/yii2-bootstrap5-dropdown": "^1.0"
->>>>>>> a34c634626772f3f57032e512966e23ca537628e
+        "kartik-v/yii2-widget-fileinput": "^1.1",
+        "kartik-v/yii2-widget-select2": "^2.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

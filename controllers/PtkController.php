@@ -72,18 +72,25 @@ class PtkController extends Controller
     public function actionUpload()
     {
         $model = new UploadForm();
-    
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
-    
             if ($model->file) {
                 return $this->importExcel($model->file->tempName);
-            } else {
-                $postData = Yii::$app->request->post('UploadForm');
-                return $this->importManual($postData);
             }
         } else {
             return $this->render('upload', ['model' => $model]);
+        }
+        
+    }
+
+    public function actionInsert()
+    {
+        $model = new UploadForm();
+        if (Yii::$app->request->isPost) {
+            $postData = Yii::$app->request->post('UploadForm');
+            return $this->importManual($postData);
+        } else {
+            return $this->render('insert', ['model' => $model]);
         }
         
     }
@@ -94,15 +101,18 @@ class PtkController extends Controller
         $data = Excel::import($tempFilePath, [
             'setFirstRecordAsKeys' => true,
         ]);
-
+        $totalData=0;
+        $totalSkip=0;
         foreach ($data as $row) {
-            // Cek apakah NIK sudah ada di database
             if (isset($row['NIK']) && Ptk::find()->where(['nik' => $row['NIK']])->exists()) {
-                continue; // Skip jika NIK sudah ada
+                $totalSkip++;
+                $totalData++;
+                continue;
             }
+            $totalData++;
 
             $ptk = new Ptk();
-            $ptk->ptk_id = $this->generateUuid(); // Tambahkan UUID sebagai ptk_id
+            $ptk->ptk_id = $this->generateUuid();
             $ptk->nama = $row['Nama'] ?? null;
             $ptk->nik = $row['NIK'] ?? null;
             $ptk->nuptk = isset($row['NUPTK']) ? trim($row['NUPTK']) : null;
@@ -125,16 +135,20 @@ class PtkController extends Controller
             $ptk->pangkat_golongan = $row['Pangkat/Gol'] ?? null;
             $ptk->save(false);
         }
-
-        Yii::$app->session->setFlash('success', 'Data berhasil diunggah!');
+        $totalSuccess=$totalData-$totalSkip;
+        if($totalSkip>0){
+            Yii::$app->session->setFlash('danger', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess.'<br>Gagal: '.$totalSkip.' karena NIK sudah terdaftar.');
+        }else{
+            Yii::$app->session->setFlash('success', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess);
+        }
         return $this->redirect(['index']);
     }
 
     protected function importManual($postData)
     {
         if (isset($postData['nik']) && Ptk::find()->where(['nik' => $postData['nik']])->exists()) {
-            Yii::$app->session->setFlash('error', 'NIK sudah ada dalam database.');
-            return $this->redirect(['upload']);
+            Yii::$app->session->setFlash('error', 'NIK sudah terdaftar.');
+            return $this->redirect(['insert']);
         }
     
         $ptk = new Ptk();
@@ -147,7 +161,7 @@ class PtkController extends Controller
         $ptk->tempat_lahir = $postData['tempat_lahir'] ?? null;
         $ptk->tanggal_lahir = isset($postData['tanggal_lahir']) ? date('Y-m-d', strtotime($postData['tanggal_lahir'])) : null;
         $ptk->status_keaktifan = $postData['status_keaktifan'] ?? null;
-        $ptk->sekolah_id = $postData['sekolah_id'] ?? null;
+        $ptk->sekolah_id = $postData['npsn'] ?? null;
         $ptk->kecamatan = $postData['kecamatan'] ?? null;
         $ptk->kabupaten = $postData['kabupaten'] ?? null;
         $ptk->no_hp = $postData['no_hp'] ?? null;
