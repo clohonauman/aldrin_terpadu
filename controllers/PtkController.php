@@ -69,25 +69,6 @@ class PtkController extends Controller
         }
     }
       
-    public function actionInsert()
-    {
-        $model = new UploadForm();
-    
-        if (Yii::$app->request->isPost) {
-            $model->file = UploadedFile::getInstance($model, 'file');
-    
-            if ($model->file) {
-                return $this->importExcel($model->file->tempName);
-            } else {
-                $postData = Yii::$app->request->post('UploadForm');
-                return $this->importManual($postData);
-            }
-        } else {
-            return $this->render('insert', ['model' => $model]);
-        }
-        
-    }
-      
     public function actionUpload()
     {
         $model = new UploadForm();
