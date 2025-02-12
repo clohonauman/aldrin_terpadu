@@ -69,21 +69,44 @@ class PtkController extends Controller
         }
     }
       
+    public function actionInsert()
+    {
+        $model = new UploadForm();
+    
+        if (Yii::$app->request->isPost) {
+            $model->file = UploadedFile::getInstance($model, 'file');
+    
+            if ($model->file) {
+                return $this->importExcel($model->file->tempName);
+            } else {
+                $postData = Yii::$app->request->post('UploadForm');
+                return $this->importManual($postData);
+            }
+        } else {
+            return $this->render('insert', ['model' => $model]);
+        }
+        
+    }
+      
     public function actionUpload()
     {
         $model = new UploadForm();
-
+    
         if (Yii::$app->request->isPost) {
             $model->file = UploadedFile::getInstance($model, 'file');
-            
+    
             if ($model->file) {
-                // Proses langsung tanpa menyimpan file
                 return $this->importExcel($model->file->tempName);
+            } else {
+                $postData = Yii::$app->request->post('UploadForm');
+                return $this->importManual($postData);
             }
+        } else {
+            return $this->render('upload', ['model' => $model]);
         }
-
-        return $this->render('upload', ['model' => $model]);
+        
     }
+    
 
     protected function importExcel($tempFilePath)
     {
@@ -126,6 +149,45 @@ class PtkController extends Controller
         return $this->redirect(['index']);
     }
 
+    protected function importManual($postData)
+    {
+        if (isset($postData['nik']) && Ptk::find()->where(['nik' => $postData['nik']])->exists()) {
+            Yii::$app->session->setFlash('error', 'NIK sudah ada dalam database.');
+            return $this->redirect(['upload']);
+        }
+    
+        $ptk = new Ptk();
+        $ptk->ptk_id = $this->generateUuid(); // Tambahkan UUID sebagai ptk_id
+        $ptk->nama = $postData['nama'] ?? null;
+        $ptk->nik = $postData['nik'] ?? null;
+        $ptk->nuptk = isset($postData['nuptk']) ? trim($postData['nuptk']) : null;
+        $ptk->nip = $postData['nip'] ?? null;
+        $ptk->jenis_kelamin = $postData['jenis_kelamin'] ?? null;
+        $ptk->tempat_lahir = $postData['tempat_lahir'] ?? null;
+        $ptk->tanggal_lahir = isset($postData['tanggal_lahir']) ? date('Y-m-d', strtotime($postData['tanggal_lahir'])) : null;
+        $ptk->status_keaktifan = $postData['status_keaktifan'] ?? null;
+        $ptk->sekolah_id = $postData['sekolah_id'] ?? null;
+        $ptk->kecamatan = $postData['kecamatan'] ?? null;
+        $ptk->kabupaten = $postData['kabupaten'] ?? null;
+        $ptk->no_hp = $postData['no_hp'] ?? null;
+        $ptk->sk_cpns = $postData['sk_cpns'] ?? null;
+        $ptk->tgl_cpns = isset($postData['tgl_cpns']) ? date('Y-m-d', strtotime($postData['tgl_cpns'])) : null;
+        $ptk->sk_pengangkatan = $postData['sk_pengangkatan'] ?? null;
+        $ptk->tmt_pengangkatan = isset($postData['tmt_pengangkatan']) ? date('Y-m-d', strtotime($postData['tmt_pengangkatan'])) : null;
+        $ptk->jenis_ptk = $postData['jenis_ptk'] ?? null;
+        $ptk->jabatan = $postData['jabatan'] ?? null;
+        $ptk->status_kepegawaian = $postData['status_kepegawaian'] ?? null;
+        $ptk->pangkat_golongan = $postData['pangkat_golongan'] ?? null;
+    
+        if ($ptk->save(false)) {
+            Yii::$app->session->setFlash('success', 'Data berhasil ditambahkan secara manual.');
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
+            return $this->redirect(['upload']);
+        }
+    }
+    
     private function generateUuid()
     {
         return sprintf(
