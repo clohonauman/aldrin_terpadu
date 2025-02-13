@@ -2,7 +2,7 @@
 try {
     return [
         'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=' . getenv('DB_HOSTNAME') . ';port=' . getenv('DB_PORT') . ';dbname=' . getenv('DB_NAME'),
+        'dsn' => 'mysql:host=' . '127.0.0.1' . ';port=' .'3306' . ';dbname=' . 'db_aldrin',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
