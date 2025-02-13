@@ -69,7 +69,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <div class="login-container">
     <div class="text-center">
-        <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
+        <img class="w-100 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
     </div>
     <hr>
     <?= $content ?>
