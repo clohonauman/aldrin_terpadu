@@ -13,7 +13,7 @@ class m250213_001336_ptk extends Migration
     public function safeUp()
     {
         $this->createTable('ptk', [
-            'ptk_id' => $this->char(36)->notNull(),
+            'ptk_id' => $this->char(36)->notNull()->append('PRIMARY KEY'),
             'semester_id' => $this->string(5),
             'sekolah_id' => $this->char(36),
             'ptk_terdaftar_id' => $this->char(36),
