@@ -16,14 +16,14 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $session = Yii::$app->session;
-        $kode_akses = $session->get('kode_akses');
+        $id_akun = $session->get('id_akun');
     
-        if (!in_array($kode_akses, [0, 1, 3])) {
-            $this->layout = 'login'; // Gunakan layout khusus login
-            return $this->redirect(getenv('BASE_URL') . 'login');
+        if (empty($id_akun)) {
+            return $this->redirect(getenv('BASE_URL') . 'index');
+        }else{
+            return $this->redirect(['/beranda']);
         }
     
-        return $this->redirect(['/beranda']); // Jika sudah login dan kode akses valid, ke dashboard
     }
     
     
