@@ -7,7 +7,6 @@ $this->title = 'MASUK';
 ?>
 
 <div class="login-container">
-    <h2><?= Html::encode($this->title) ?></h2>
 
     <?php $form = ActiveForm::begin(); ?>
 
