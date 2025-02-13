@@ -81,15 +81,4 @@ class UploadForm extends Model
             [['tanggal_lahir','tmt_pengangkatan','tgl_cpns'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
-    
-
-    public function upload()
-    {
-        if ($this->validate()) {
-            $filePath = 'uploads/' . $this->file->baseName . '.' . $this->file->extension;
-            $this->file->saveAs($filePath);
-            return $filePath;
-        }
-        return false;
-    }
 }
