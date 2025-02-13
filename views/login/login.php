@@ -5,13 +5,34 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'MASUK | ALDRIN TERPADU';
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<div class="login-form">
+    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'nama_pengguna')->textInput(['maxlength' => 35, 'placeholder' => 'Nama Pengguna'])->label(' ') ?>
-    <?= $form->field($model, 'kata_sandi')->passwordInput(['maxlength' => 35, 'placeholder' => 'Kata Sandi'])->label(' ') ?>
-    <hr>
     <div class="form-group">
-        <?= Html::submitButton('Masuk', ['class' => 'btn btn-primary col-md-12']) ?>
+        <?= $form->field($model, 'nama_pengguna', [
+            'template' => "{input}\n<div class='text-danger fst-italic'>{error}</div>",
+        ])->textInput([
+            'maxlength' => 50,
+            'placeholder' => 'Nama Pengguna',
+            'class' => 'form-control',
+        ])->label(false) ?>
     </div>
 
-<?php ActiveForm::end(); ?>
+    <div class="form-group">
+        <?= $form->field($model, 'kata_sandi', [
+            'template' => "{input}\n<div class='text-danger fst-italic'>{error}</div>",
+        ])->passwordInput([
+            'maxlength' => 50,
+            'placeholder' => 'Kata Sandi',
+            'class' => 'form-control',
+        ])->label(false) ?>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <?= Html::submitButton('Masuk', ['class' => 'btn btn-light col-md-12']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+</div>
