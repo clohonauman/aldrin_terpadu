@@ -2,11 +2,12 @@
 
 namespace app\controllers;
 
+use app\components\BaseController;
 use app\models\MataPelajaran;
 use app\models\MataPelajaranSearch;
 use Yii;
 
-class MapelController extends \yii\web\Controller
+class MapelController extends BaseController
 {
     public function actionIndex()
     {
