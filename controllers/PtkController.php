@@ -8,8 +8,9 @@ use yii\web\UploadedFile;
 use app\models\UploadForm;
 use app\models\Ptk;
 use moonland\phpexcel\Excel;
+use app\components\BaseController;
 
-class PtkController extends Controller
+class PtkController extends BaseController
 {
     public function actionIndex()
     {

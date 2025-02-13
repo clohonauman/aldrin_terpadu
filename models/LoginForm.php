@@ -4,78 +4,70 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\Akun;
+use yii\web\Session;
 
-/**
- * LoginForm is the model behind the login form.
- *
- * @property-read User|null $user
- *
- */
 class LoginForm extends Model
 {
-    public $username;
-    public $password;
-    public $rememberMe = true;
-
+    public $nama_pengguna;
+    public $kata_sandi;
     private $_user = false;
 
-
-    /**
-     * @return array the validation rules.
-     */
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+            [['nama_pengguna', 'kata_sandi'], 'required'],
+            ['nama_pengguna', 'string', 'max' => 50],
+            ['kata_sandi', 'validatePassword'],
         ];
     }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
     public function validatePassword($attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+            if (!$user || !Yii::$app->security->validatePassword($this->kata_sandi, $user->kata_sandi)) {
+                $this->addError($attribute, 'Nama pengguna atau kata sandi salah.');
             }
         }
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
-     */
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $user = $this->getUser();
+            $session = Yii::$app->session;
+            $session->open();
+
+            $session->set('id_akun', $user->id_akun);
+            $session->set('nama_lengkap', $user->nama_lengkap);
+            $session->set('kode_akses', $user->peran->kode_akses);
+            $session->set('id_sekolah', $user->peran->id_sekolah);
+            $kode_akses = $session->get('kode_akses');
+
+            if (!in_array($kode_akses, [0, 1, 3])) {
+                $session->destroy();
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, base_url('/login/logout'));
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_exec($ch);
+                curl_close($ch);
+            
+                return redirect()->to('/login');
+            }
+            
+
+            return true;
         }
         return false;
     }
 
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
+    protected function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Akun::find()->where(['nama_pengguna' => $this->nama_pengguna])->with('peran')->one();
         }
-
         return $this->_user;
     }
 }

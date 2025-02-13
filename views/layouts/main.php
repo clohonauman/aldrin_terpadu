@@ -174,7 +174,10 @@ JS);
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="<?= Yii::$app->urlManager->createUrl(['/logout']) ?>" class="nav-link">
+                                <form id="logout-form" action="<?= Yii::$app->urlManager->createUrl(['/login/logout']) ?>" method="post" style="display: none;">
+                                    <?= \yii\helpers\Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                </form>
+                                <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="nav-icon fas fa-sign-out-alt"></i>
                                     <p>Keluar</p>
                                 </a>

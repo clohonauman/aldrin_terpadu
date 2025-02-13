@@ -1,9 +1,11 @@
 <?php
 
 namespace app\controllers;
+use app\components\BaseController;
 
-class BerandaController extends \yii\web\Controller
+class BerandaController extends BaseController
 {
+    
     public function actionIndex()
     {
         return $this->render('index');

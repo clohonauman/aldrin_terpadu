@@ -5,8 +5,9 @@ namespace app\controllers;
 use Yii;
 use app\models\Rombel;
 use yii\web\Controller;
+use app\components\BaseController;
 
-class RombelController extends \yii\web\Controller
+class RombelController extends BaseController
 {
     public function actionIndex()
     {

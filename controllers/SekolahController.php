@@ -8,8 +8,9 @@ use yii\web\UploadedFile;
 use app\models\UploadForm;
 use app\models\Ptk;
 use moonland\phpexcel\Excel;
+use app\components\BaseController;
 
-class SekolahController extends \yii\web\Controller
+class SekolahController extends BaseController
 {
     public function actionIndex()
     {

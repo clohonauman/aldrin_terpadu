@@ -1,6 +1,9 @@
 <?php
 /** @var yii\web\View $this */
 $this->title='BERANDA';
+
+$session = Yii::$app->session;
+$session->open();
 ?>
 <div class="card">
     <div class="card-header">
@@ -47,7 +50,7 @@ $this->title='BERANDA';
                     <div class="card alert alert-default bg-white alert-dismissable">
                         <span id="jam"></span>
                         <p style="font-size:15px">
-                            Selamat datang di <?= getenv('APP_NAME') ?></strong>.
+                            Selamat datang <?= $session->get('nama_lengkap')?> di <?= getenv('APP_NAME') ?></strong>.
                         </p>        
                     </div>
                 </div>
