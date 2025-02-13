@@ -12,58 +12,32 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::class,
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'], // Hanya user yang login yang bisa logout
-                    ],
-                ],
-            ],
-        ];
-    }
 
+    public function actionIndex()
+    {
+        $session = Yii::$app->session;
+        $kode_akses = $session->get('kode_akses');
+    
+        if (!in_array($kode_akses, [0, 1, 3])) {
+            $this->layout = 'login'; // Gunakan layout khusus login
+            return $this->redirect(getenv('BASE_URL') . 'login');
+        }
+    
+        return $this->redirect(['/beranda']); // Jika sudah login dan kode akses valid, ke dashboard
+    }
+    
+    
     public function actions()
     {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
+                'layout' => 'error',
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
-    }
-
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->redirect(['site/index']); // Redirect jika sudah login
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goHome(); // Redirect ke home setelah login
-        }
-
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-        return $this->redirect(['site/login']); // Redirect ke halaman login setelah logout
     }
 }
