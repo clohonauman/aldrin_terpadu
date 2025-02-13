@@ -63,7 +63,7 @@ $(document).ready(function () {
                 extend: 'excelHtml5',
                 text: 'Unduh Excel',
                 className: 'btn btn-success',
-                title: 'Data PTK'
+                title: 'ALDRIN TERPADU-' + new Date().getTime()
             }
         ]
     });
