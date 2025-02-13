@@ -24,9 +24,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <style>
-        /* Background Gradient */
         body {
-            background: linear-gradient(135deg, #1d3557, #457b9d, #a8dadc);
+            background: linear-gradient(135deg,rgb(255, 255, 255),rgb(108, 108, 108),rgb(183, 183, 183));
             height: 100vh;
             display: flex;
             align-items: center;
@@ -43,7 +42,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             max-width: 400px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            text-align: center;
             animation: fadeIn 0.7s ease-in-out;
         }
 
@@ -64,26 +62,16 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         .form-control::placeholder {
             color: rgba(255, 255, 255, 0.7);
         }
-
-        /* Button Styling */
-        .btn-primary {
-            background: #1d3557;
-            border: none;
-            border-radius: 25px;
-            padding: 12px;
-            transition: 0.3s;
-        }
-        .btn-primary:hover {
-            background: #457b9d;
-            transform: scale(1.05);
-        }
     </style>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
 <div class="login-container">
-    <h3 class="mb-3 text-white">ALDRIN TERPADU</h3>
+    <div class="text-center">
+        <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
+    </div>
+    <hr>
     <?= $content ?>
 </div>
 

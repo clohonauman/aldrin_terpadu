@@ -16,7 +16,8 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [['nama_pengguna', 'kata_sandi'], 'required'],
+            [['nama_pengguna'], 'required', 'message' => 'Nama pengguna wajib diisi.'],
+            [['kata_sandi'], 'required', 'message' => 'Kata sandi wajib diisi.'],
             ['nama_pengguna', 'string', 'max' => 50],
             ['kata_sandi', 'validatePassword'],
         ];
