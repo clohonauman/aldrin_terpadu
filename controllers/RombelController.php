@@ -51,10 +51,9 @@ class RombelController extends BaseController
         $model = new Rombel();
         if (Yii::$app->request->isPost) {
             $postData = Yii::$app->request->post('Rombel');
-            // return $this->importManual($postData);
+            return $this->importManual($postData);
         } else {
             return $this->render('insert', ['model' => $model]);
         }
     }
-
 }

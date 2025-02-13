@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function actionIndex()
     {
-        if (!Yii::$app->user->isGuest) {
+        if (Yii::$app->session->get('id_akun')) {
             return $this->redirect(['/beranda']);
         }
 
@@ -25,10 +25,10 @@ class LoginController extends Controller
             'model' => $model,
         ]);
     }
-
     public function actionLogout()
     {
-        Yii::$app->session->destroy();
-        return $this->redirect(['/login']);
+        Yii::$app->session->removeAll(); // Hapus semua session yang tersimpan
+        return $this->redirect(['/']); // Redirect ke halaman utama
     }
+    
 }

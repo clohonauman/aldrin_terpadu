@@ -5,12 +5,14 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = 'UNGGAH DATA ROMBEL';
+$session = Yii::$app->session;
+$session->open();
+$npsn=$session->get('id_sekolah');
 
-
-$sekolahList = Yii::$app->db->createCommand("SELECT npsn, nama FROM sekolah ORDER BY nama")->queryAll();
-$dropdownDataSekolah = [];
-foreach ($sekolahList as $sekolah) {
-    $dropdownDataSekolah[$sekolah['npsn']] = $sekolah['npsn'] . ' | ' . $sekolah['nama'];
+$ptkList = Yii::$app->db->createCommand("SELECT ptk_id, nama FROM ptk WHERE sekolah_id='$npsn' ORDER BY nama")->queryAll();
+$dropdownDataPTK = [];
+foreach ($ptkList as $ptk) {
+    $dropdownDataPTK[$ptk['ptk_id']] = $ptk['nama'];
 }
 ?>
 <div class="card">
@@ -29,11 +31,46 @@ foreach ($sekolahList as $sekolah) {
                 <hr>
                 <h5>DATA ROMBEL</h5>
                 <hr>
+
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'nama_rombel')->textInput(['maxlength' => 16, 'placeholder' => 'Masukkan Nama Rombel'])->label('Nama Rombel <span class="text-danger">*</span>') ?>
+                        <?= $form->field($model, 'ptk')->widget(Select2::classname(), [
+                            'data' => $dropdownDataPTK,
+                            'options' => ['placeholder' => '- Pilih PTK -'],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ])->label('PTK <span class="text-danger">*</span>'); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'tingkat_pendidikan')->textInput(['type'=> 'number','maxlength' => 20, 'placeholder' => 'Masukkan Tingkat Pendidikan'])->label('Tingkat Pendidikan') ?>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- <?= $form->field($model, 'nama_ptk')->textInput(['maxlength' => 255, 'placeholder' => 'Masukkan Nama PTK'])->label('Nama PTK') ?> -->
+                    </div>
+                    <div class="col-md-6">
+                        <!-- <?= $form->field($model, 'kurikulum')->textInput(['maxlength' => 255, 'placeholder' => 'Masukkan Kurikulum'])->label('Kurikulum') ?> -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'nama')->textInput(['maxlength' => 30, 'placeholder' => 'Masukkan Nama Rombel'])->label('Nama Rombel') ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'jumlah_pembelajaran')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Pembelajaran'])->label('Jumlah Pembelajaran') ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'jumlah_anggota_rombel')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Anggota Rombel'])->label('Jumlah Anggota Rombel') ?>
+                    </div>
+                </div>
+
                 <hr>
                 <div class="row">
                     <div class="form-group">
