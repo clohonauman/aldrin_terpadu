@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-
+$this->title = 'Edit Mata Pelajaran: ' . $model->mata_pelajaran;
 ?>
 <div class="card">
     <div class="card-header">
@@ -27,11 +27,13 @@ use yii\widgets\ActiveForm;
         <div class="mapel-create">
 
             <?php $form = ActiveForm::begin(); ?>
-            <?= $form->field($model, 'mata_pelajaran') ?>
-            <?= $form->field($model, 'jam_pelajaran') ?>
+
+            <?= $form->field($model, 'mata_pelajaran')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'jam_pelajaran')->textInput(['maxlength' => true]) ?>
             <div class="form-group">
-                <?= Html::submitButton(Yii::t('app', 'Tambah'), ['class' => 'btn btn-primary btn-block']) ?>
+                <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
             </div>
+
             <?php ActiveForm::end(); ?>
 
         </div><!-- mapel-create -->

@@ -15,6 +15,7 @@ class m250211_182430_mata_pelajaran extends Migration
         $this->createTable('mata_pelajaran', [
             'id' => $this->primaryKey(),
             'mata_pelajaran' => $this->string(255)->notNull(),
+            'jam_pelajaran' => $this->integer(11)->notNull(),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
         ]);
@@ -29,7 +30,6 @@ class m250211_182430_mata_pelajaran extends Migration
         return false;
     }
 
-    /*
     // Use up()/down() to run migration code without a transaction.
     public function up()
     {
@@ -42,5 +42,4 @@ class m250211_182430_mata_pelajaran extends Migration
 
         return false;
     }
-    */
 }

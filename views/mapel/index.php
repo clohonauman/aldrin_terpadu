@@ -1,10 +1,8 @@
 <?php
 
-use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\data\ActiveDataProvider;
-use kartik\date\DatePicker;
-use yii\widgets\Pjax;
+use yii\helpers\Url;
+
 
 
 /** @var yii\web\View $this */
@@ -36,29 +34,41 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <hr>
-        <div class="mata-pelajaran-index">
-            <?php Pjax::begin(); ?>
-            <?= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'kartik\grid\SerialColumn'],
-                    'id',
-                    'mata_pelajaran',
-                    ['class' => 'kartik\grid\ActionColumn'],
-                ],
-                'toolbar' => [
-                    '{export}',
-                    '{toggleData}',
-                ],
-                'export' => [
-                    'fontAwesome' => true,
-                ],
-                'pjax' => true,
-            ]); ?>
 
-            <?php Pjax::end(); ?>
-
+        <div>
+            <div class="table-responsive">
+                <table id="myTable" class="table table-striped table-bordered">
+                    <thead>
+                        <tr class="text-center">
+                            <th>NO</th>
+                            <th>MATA PELAJARAN</th>
+                            <th>JAM PELAJARAN</th>
+                            <th>AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $no = 1;
+                        foreach ($data as $mapel):
+                        ?>
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= $mapel['mata_pelajaran'] ?></td>
+                                <td><?= $mapel['jam_pelajaran'] ?></td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-center">
+                                        <a href="<?= Yii::$app->urlManager->createUrl(['/mapel/update', 'id' => $mapel['id']]) ?>" class="btn btn-warning">Edit</a>
+                                        <?= Html::beginForm(Url::to(['mapel/delete', 'id' => $mapel['id']]), 'post') ?>
+                                        <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">Hapus</button>
+                                        <?= Html::endForm() ?>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>

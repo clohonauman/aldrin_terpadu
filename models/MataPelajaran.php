@@ -28,9 +28,10 @@ class MataPelajaran extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mata_pelajaran'], 'required'],
+            [['mata_pelajaran', 'jam_pelajaran'], 'required'], // Tambahkan required untuk jam_pelajaran
             [['created_at', 'updated_at'], 'safe'],
             [['mata_pelajaran'], 'string', 'max' => 255],
+            [['jam_pelajaran'], 'integer', 'min' => 0] // Perbaikan disini
         ];
     }
 
@@ -42,6 +43,7 @@ class MataPelajaran extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'mata_pelajaran' => 'Mata Pelajaran',
+            'jam_pelajaran' => 'Jam Pelajaran',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
