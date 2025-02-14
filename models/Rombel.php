@@ -10,12 +10,14 @@ use yii\db\ActiveRecord;
 class Rombel extends ActiveRecord
 {
 
-    public $nama;
+    public $nama_rombel;
     public $tingkat_pendidikan;
     public $ptk;
     public $kurikulum;
     public $jumlah_pembelajaran;
     public $jumlah_anggota_rombel;
+    public $semester;
+    public $mata_pelajaran;
     
     public static function tableName()
     {
@@ -25,11 +27,10 @@ class Rombel extends ActiveRecord
     public function rules()
     {
         return [
-            [['ptk', 'nama'], 'required', 'message' => '{attribute} wajib diisi.'],
-            [['semester_id', 'sekolah_id', 'kurikulum'], 'safe'], // Optional fields
-            [['tingkat_pendidikan_id', 'jumlah_pembelajaran', 'jumlah_anggota_rombel'], 'integer', 'message' => '{attribute} harus berupa angka.'],
+            [['ptk', 'nama_rombel', 'semester', 'tingkat_pendidikan', 'jumlah_pembelajaran','mata_pelajaran'], 'required', 'message' => '{attribute} wajib diisi.'],
+            [['tingkat_pendidikan', 'jumlah_pembelajaran', 'jumlah_anggota_rombel'], 'integer', 'message' => '{attribute} harus berupa angka.'],
             [['nama'], 'string', 'max' => 30, 'message' => '{attribute} maksimal 30 karakter.'],
-            [['nama_ptk'], 'string', 'max' => 255, 'message' => '{attribute} maksimal 255 karakter.'],
+            [['semester'], 'string', 'max' => 10],
         ];
     }
 }

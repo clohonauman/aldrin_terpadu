@@ -9,10 +9,16 @@ $session = Yii::$app->session;
 $session->open();
 $npsn=$session->get('id_sekolah');
 
-$ptkList = Yii::$app->db->createCommand("SELECT ptk_id, nama FROM ptk WHERE sekolah_id='$npsn' ORDER BY nama")->queryAll();
+$ptkList = Yii::$app->db->createCommand("SELECT ptk_id, nama, jabatan FROM ptk WHERE sekolah_id='$npsn' ORDER BY nama")->queryAll();
 $dropdownDataPTK = [];
 foreach ($ptkList as $ptk) {
-    $dropdownDataPTK[$ptk['ptk_id']] = $ptk['nama'];
+    $dropdownDataPTK[$ptk['ptk_id']] = $ptk['nama'] . ' | ' . $ptk['jabatan'];
+}
+
+$mapelList = Yii::$app->db->createCommand("SELECT id, mata_pelajaran FROM mata_pelajaran ORDER BY mata_pelajaran")->queryAll();
+$dropdownDataMapel = [];
+foreach ($mapelList as $mapel) {
+    $dropdownDataMapel[$mapel['id']] = $mapel['mata_pelajaran'];
 }
 ?>
 <div class="card">
@@ -24,63 +30,59 @@ foreach ($ptkList as $ptk) {
         </div>
     </div>
     <div class="card-body">
-        <?php date_default_timezone_set("Asia/Jakarta"); ?>
-        <section class="content">
+        <div class="row">
+            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+            <hr>
+            <h5>DATA ROMBEL</h5>
+            <hr>
+
             <div class="row">
-                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-                <hr>
-                <h5>DATA ROMBEL</h5>
-                <hr>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'ptk')->widget(Select2::classname(), [
-                            'data' => $dropdownDataPTK,
-                            'options' => ['placeholder' => '- Pilih PTK -'],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ])->label('PTK <span class="text-danger">*</span>'); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'tingkat_pendidikan')->textInput(['type'=> 'number','maxlength' => 20, 'placeholder' => 'Masukkan Tingkat Pendidikan'])->label('Tingkat Pendidikan') ?>
-                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'ptk')->widget(Select2::classname(), [
+                        'data' => $dropdownDataPTK,
+                        'options' => ['placeholder' => '- Pilih PTK -'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('PTK <span class="text-danger">*</span>'); ?>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <!-- <?= $form->field($model, 'nama_ptk')->textInput(['maxlength' => 255, 'placeholder' => 'Masukkan Nama PTK'])->label('Nama PTK') ?> -->
-                    </div>
-                    <div class="col-md-6">
-                        <!-- <?= $form->field($model, 'kurikulum')->textInput(['maxlength' => 255, 'placeholder' => 'Masukkan Kurikulum'])->label('Kurikulum') ?> -->
-                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'tingkat_pendidikan')->textInput(['type'=> 'number','maxlength' => 2, 'placeholder' => 'Masukkan Tingkat Pendidikan'])->label('Tingkat Pendidikan <span class="text-danger">*</span>') ?>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'nama')->textInput(['maxlength' => 30, 'placeholder' => 'Masukkan Nama Rombel'])->label('Nama Rombel') ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'jumlah_pembelajaran')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Pembelajaran'])->label('Jumlah Pembelajaran') ?>
-                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'nama_rombel')->textInput(['maxlength' => 30, 'placeholder' => 'Masukkan Nama Rombel'])->label('Nama Rombel <span class="text-danger">*</span>') ?>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'jumlah_anggota_rombel')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Anggota Rombel'])->label('Jumlah Anggota Rombel') ?>
-                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'jumlah_pembelajaran')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Pembelajaran'])->label('Jumlah Pembelajaran <span class="text-danger">*</span>') ?>
                 </div>
-
-                <hr>
-                <div class="row">
-                    <div class="form-group">
-                        <?= Html::submitButton('Simpan', ['class' => 'btn btn-primary']) ?>
-                        <a href="<?= Yii::$app->urlManager->createUrl(['/rombel']) ?>" class="btn btn-secondary"> Batal</a>
-                    </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'jumlah_anggota_rombel')->textInput(['type' => 'number', 'placeholder' => 'Masukkan Jumlah Anggota Rombel'])->label('Jumlah Anggota Rombel') ?>
                 </div>
-
-                <?php ActiveForm::end(); ?>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'semester')->dropDownList(
+                        ['Ganjil' => 'Ganjil', 'Genap' => 'Genap'],
+                        ['prompt' => '- Pilih Semester -']
+                    )->label('Semester <span class="text-danger">*</span>') ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'mata_pelajaran')->widget(Select2::classname(), [
+                        'data' => $dropdownDataMapel,
+                        'options' => ['placeholder' => '- Pilih Mata Pelajaran -'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('Mata Pelajaran <span class="text-danger">*</span>'); ?>
+                </div>
             </div>
-        </section>
+            <hr>
+            <div class="row">
+                <div class="form-group">
+                    <?= Html::submitButton('Simpan', ['class' => 'btn btn-primary']) ?>
+                    <a href="<?= Yii::$app->urlManager->createUrl(['/rombel']) ?>" class="btn btn-secondary"> Batal</a>
+                </div>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+        </div>
     </div>
 </div>
