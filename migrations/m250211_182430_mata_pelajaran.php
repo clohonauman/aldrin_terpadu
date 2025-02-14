@@ -29,17 +29,4 @@ class m250211_182430_mata_pelajaran extends Migration
         $this->dropTable('mata_pelajaran');
         return false;
     }
-
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m250211_182430_mata_pelajaran cannot be reverted.\n";
-
-        return false;
-    }
 }
