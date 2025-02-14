@@ -70,6 +70,12 @@ $(document).ready(function () {
 });
 JS);
 
+$kodeAkses = Yii::$app->session->get('kode_akses');
+$roles = [
+    0 => 'Super Admin',
+    1 => 'Admin',
+    3 => 'Operator Sekolah',
+];
 
 ?>
 <?php $this->beginPage() ?>
@@ -86,7 +92,7 @@ JS);
         <div class="wrapper">
             
             <!-- Navbar -->
-            <nav class="main-header navbar navbar-expand navbar-dark">
+            <nav class="main-header navbar navbar-expand navbar-dark position-fixed w-100 top-0">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -98,6 +104,8 @@ JS);
             <aside class="main-sidebar sidebar-dark-primary elevation-5">
                 <a href="#" class="brand-link text-center text-decoration-none p-0">
                     <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
+                    <hr>
+                    <p class="fst-italic fs-6 mt-0"><?= isset($roles[$kodeAkses]) ? $roles[$kodeAkses] : 'Tidak Diketahui'; ?></p>
                 </a>
 
                 <div class="sidebar">
@@ -185,16 +193,8 @@ JS);
             </aside>
             
             <!-- Content Wrapper -->
-            <div class="content-wrapper">
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <section class="content">
+            <div class="content-wrapper pt-4">
+                <section class="content mt-4 pt-4">
                     <div class="container-fluid">
                         <?= Alert::widget() ?>
                         <?= $content ?>
