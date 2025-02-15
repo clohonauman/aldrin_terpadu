@@ -8,7 +8,7 @@ $this->title = 'DATA PTK';
 // Ambil data filter dari tabel sekolah
 $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sekolah ORDER BY nama")->queryAll();
 ?>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <div class="card">
     <div class="card-header">
     <div class="col-sm-12">
@@ -71,57 +71,102 @@ $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sek
             <hr>
             <!-- Tabel Data PTK -->
             <div class="table-responsive">
-                <table id="myTable" class="table table-striped table-bordered">
+                <table id="myTable_akg" class="table table-striped table-bordered">
                     <thead>
-        <tr>
-            <th rowspan="2">No</th>
-            <th rowspan="2">Mata Pelajaran</th>
-            <?php for ($i = 1; $i <= 9; $i++) : ?>
-                <th colspan="3">Tingkat <?= $i ?></th>
-            <?php endfor; ?>
-            <th rowspan="2">Total Hasil</th>
-            <th rowspan="2">Rasio</th>
-            <th rowspan="2">Rasio Rounded</th>
-            <th colspan="4">Jumlah PTK (Existing)</th>
-            <th rowspan="2">Kebutuhan</th>
-            <!-- <th rowspan="2">Analisis</th> -->
-        </tr>
-        <tr>
-            <?php for ($i = 1; $i <= 9; $i++) : ?>
-                <th>JJM</th>
-                <th>ROMBEL</th>
-                <th>HASIL</th>
-            <?php endfor; ?>
-            <th>PNS</th>
-            <th>PPPK</th>
-            <th>NON ASN</th>
-            <th>TOTAL</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = 1; ?>
-        <?php foreach ($data as $mapel) : ?>
-            <tr>
-                <td><?= $no++ ?></td>
-                <td><?= $mapel['nama_mapel'] ?></td>
-                <?php foreach ($mapel['tingkat_pendidikan'] as $tingkat) : ?>
-                    <td><?= $tingkat['total_jam_mengajar'] ?></td>
-                    <td><?= $tingkat['jumlah_rombel'] ?></td>
-                    <td><?= $tingkat['total_jam_mengajar'] * ($tingkat['jumlah_rombel'] ?: 1) ?></td>
-                <?php endforeach; ?>
-                <td><?= $mapel['total_hasil'] ?></td> <!-- Rasio -->
-                <td><?= $mapel['rasio'] ?></td> <!-- Rasio -->
-                <td><?= $mapel['rasio_rounded'] ?></td> <!-- Rasio Rounded -->
-                <td><?= $mapel['pns'] ?></td> <!-- PNS -->
-                <td><?= $mapel['pppk'] ?></td> <!-- PPPK -->
-                <td><?= $mapel['non_asn'] ?></td> <!-- NON ASN -->
-                <td><?= $mapel['total_ptk'] ?></td> <!-- TOTAL -->
-                <td><?= $mapel['rasio_rounded']-$mapel['total_ptk'] ?></td> <!-- Kebutuhan -->
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+                        <tr>
+                            <th rowspan="2" class="text-center">No</th>
+                            <th rowspan="2" class="text-center">Mata Pelajaran</th>
+                            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                                <th colspan="3" class="text-center">Tingkat <?= $i ?></th>
+                            <?php endfor; ?>
+                            <th rowspan="2" class="text-center">Total Hasil</th>
+                            <th rowspan="2" class="text-center">Rasio</th>
+                            <th rowspan="2" class="text-center">Rasio Rounded</th>
+                            <th colspan="4" class="text-center">Jumlah PTK (Existing)</th>
+                            <th rowspan="2" class="text-center">Kebutuhan</th>
+                            <th rowspan="2" class="text-center">Analisis</th>
+                        </tr>
+                        <tr>
+                            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                                <th>JJM</th>
+                                <th>ROMBEL</th>
+                                <th>HASIL</th>
+                            <?php endfor; ?>
+                            <th>PNS</th>
+                            <th>PPPK</th>
+                            <th>NON ASN</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $no = 1; ?>
+                        <?php foreach ($data as $mapel) : ?>
+                            <tr>
+                                <td class="text-center"><?= $no++ ?></td>
+                                <td><?= $mapel['nama_mapel'] ?></td>
+                                <?php foreach ($mapel['tingkat_pendidikan'] as $tingkat) : ?>
+                                    <td class="text-center"><?= $tingkat['total_jam_mengajar'] ?? 0; ?></td>
+                                    <td class="text-center"><?= $tingkat['jumlah_rombel'] ?></td>
+                                    <td class="text-center"><?= $tingkat['total_jam_mengajar'] * ($tingkat['jumlah_rombel'] ?: 1) ?></td>
+                                <?php endforeach; ?>
+                                <td class="text-center"><?= $mapel['total_hasil'] ?></td> <!-- Rasio -->
+                                <td class="text-center"><?= number_format($mapel['rasio'], 4) ?></td> <!-- Rasio -->
+                                <td class="text-center"><?= $mapel['rasio_rounded'] ?></td> <!-- Rasio Rounded -->
+                                <td class="text-center"><?= $mapel['pns'] ?></td> <!-- PNS -->
+                                <td class="text-center"><?= $mapel['pppk'] ?></td> <!-- PPPK -->
+                                <td class="text-center"><?= $mapel['non_asn'] ?></td> <!-- NON ASN -->
+                                <td class="text-center"><?= $mapel['total_ptk'] ?></td> <!-- TOTAL -->
+                                <td class="text-center"><?= $mapel['rasio_rounded']-$mapel['total_ptk'] ?></td> <!-- Kebutuhan -->
+                                <td>  <!-- Analisis -->
+                                    <?php 
+                                        $selisih = $mapel['rasio_rounded'] - $mapel['total_ptk'];
+                                        if ($selisih > 0) {
+                                            echo "Kurang $selisih PTK.";
+                                        } elseif ($selisih < 0) {
+                                            echo "Lebih " . abs($selisih) . " PTK.";
+                                        } else {
+                                            echo "Sudah Sesuai.";
+                                        }
+                                    ?>
+                                </td>
+
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
+            <button class="btn btn-success" onclick="exportToExcel()"><i class="fa fa-download"></i> XLSX</button>
+            <script>
+                function exportToExcel() {
+                    var table = document.getElementById("myTable_akg");
+                    var ws = XLSX.utils.table_to_sheet(table);
+                    var wb = XLSX.utils.book_new();
+                    const range = XLSX.utils.decode_range(ws['!ref']);
+                    for (let R = range.s.r; R <= range.e.r; ++R) {
+                        for (let C = range.s.c; C <= range.e.c; ++C) {
+                            const cellAddress = XLSX.utils.encode_cell({ r: R, c: C });
+                            if (!ws[cellAddress]) continue;
+
+                            ws[cellAddress].s = {
+                                border: {
+                                    top: { style: "bold", color: { rgb: "000000" } },
+                                    bottom: { style: "bold", color: { rgb: "000000" } },
+                                    left: { style: "bold", color: { rgb: "000000" } },
+                                    right: { style: "bold", color: { rgb: "000000" } }
+                                },
+                                alignment: {
+                                    horizontal: "center",
+                                    vertical: "center"
+                                }
+                            };
+                        }
+                    }
+                    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                    var timestamp = Math.floor(Date.now() / 1000);
+                    var filename = "AKG_ALDRIN TERPADU-" + timestamp + ".xlsx";
+                    XLSX.writeFile(wb, filename);
+                }
+            </script>
         </section>
     </div>
 </div>

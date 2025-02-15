@@ -20,11 +20,16 @@ class AkgController extends Controller
         }
     
         $mapelList = (new \yii\db\Query())
-            ->select(['mapel.mata_pelajaran AS nama_mapel', 'pembelajaran.mata_pelajaran_id', 'pembelajaran.ptk_id'])
+            ->select([
+                'mapel.mata_pelajaran AS nama_mapel',
+                'pembelajaran.mata_pelajaran_id',
+                'pembelajaran.ptk_id'
+            ])
             ->from('pembelajaran')
             ->leftJoin('mata_pelajaran AS mapel', 'mapel.id = pembelajaran.mata_pelajaran_id')
             ->where(['pembelajaran.sekolah_id' => $sekolahId])
             ->groupBy(['mapel.mata_pelajaran', 'pembelajaran.mata_pelajaran_id'])
+            ->orderBy(['mapel.mata_pelajaran' => SORT_ASC]) // Urutkan berdasarkan nama_mapel (mata pelajaran)
             ->all();
     
         $data = [];
@@ -69,41 +74,41 @@ class AkgController extends Controller
                 }
 
                 $pns = (new \yii\db\Query())
-                ->select([
-                    'COUNT(DISTINCT pembelajaran.ptk_id) AS pns'
-                ])
-                ->from('pembelajaran')
-                ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
-                ->where([
-                    'ptk.status_kepegawaian' => 'PNS',
-                    'pembelajaran.sekolah_id' => $sekolahId,
-                    'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
-                ])
-                ->one();
+                        ->select([
+                            'COUNT(DISTINCT pembelajaran.ptk_id) AS pns'
+                        ])
+                        ->from('pembelajaran')
+                        ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
+                        ->where([
+                            'ptk.status_kepegawaian' => 'PNS',
+                            'pembelajaran.sekolah_id' => $sekolahId,
+                            'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
+                        ])
+                        ->one();
                 $pppk = (new \yii\db\Query())
-                ->select([
-                    'COUNT(DISTINCT pembelajaran.ptk_id) AS pppk'
-                ])
-                ->from('pembelajaran')
-                ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
-                ->where([
-                    'ptk.status_kepegawaian' => 'PPPK',
-                    'pembelajaran.sekolah_id' => $sekolahId,
-                    'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
-                ])
-                ->one();
+                        ->select([
+                            'COUNT(DISTINCT pembelajaran.ptk_id) AS pppk'
+                        ])
+                        ->from('pembelajaran')
+                        ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
+                        ->where([
+                            'ptk.status_kepegawaian' => 'PPPK',
+                            'pembelajaran.sekolah_id' => $sekolahId,
+                            'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
+                        ])
+                        ->one();
                 $non_asn = (new \yii\db\Query())
-                ->select([
-                    'COUNT(DISTINCT pembelajaran.ptk_id) AS non_asn'
-                ])
-                ->from('pembelajaran')
-                ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
-                ->where([
-                    'pembelajaran.sekolah_id' => $sekolahId,
-                    'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
-                ])
-                ->andWhere(['NOT IN', 'ptk.status_kepegawaian', ['PNS', 'PPPK']])
-                ->one();
+                        ->select([
+                            'COUNT(DISTINCT pembelajaran.ptk_id) AS non_asn'
+                        ])
+                        ->from('pembelajaran')
+                        ->innerJoin('ptk', 'ptk.ptk_id = pembelajaran.ptk_id')
+                        ->where([
+                            'pembelajaran.sekolah_id' => $sekolahId,
+                            'pembelajaran.mata_pelajaran_id' => $mapel['mata_pelajaran_id']
+                        ])
+                        ->andWhere(['NOT IN', 'ptk.status_kepegawaian', ['PNS', 'PPPK']])
+                        ->one();
             
                 $mapelData['pns'] = $pns['pns'];
                 $mapelData['pppk'] = $pppk['pppk'];
