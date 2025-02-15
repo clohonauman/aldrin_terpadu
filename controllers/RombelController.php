@@ -100,7 +100,7 @@ class RombelController extends BaseController
     protected function importManual($postData)
     {
         if (
-            isset($postData['ptk']) && Rombel::find()->where(['ptk_id' => $postData['ptk']])->exists()
+            !isset($postData['ptk'])
         ) {
             Yii::$app->session->setFlash('error', 'Rombel sudah pernah ada.');
             return $this->redirect(['insert']);

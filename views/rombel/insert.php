@@ -47,7 +47,7 @@ foreach ($mapelList as $mapel) {
                     ])->label('PTK <span class="text-danger">*</span>'); ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $form->field($model, 'tingkat_pendidikan')->textInput(['type'=> 'number','maxlength' => 2, 'placeholder' => 'Masukkan Tingkat Pendidikan'])->label('Tingkat Pendidikan <span class="text-danger">*</span>') ?>
+                    <?= $form->field($model, 'tingkat_pendidikan')->textInput(['type'=> 'number','maxlength' => 1, 'placeholder' => 'Masukkan Tingkat Pendidikan (1 s/d 9)'])->label('Tingkat Pendidikan <span class="text-danger">*</span>') ?>
                 </div>
                 <div class="col-md-6">
                     <?= $form->field($model, 'nama_rombel')->textInput(['maxlength' => 30, 'placeholder' => 'Masukkan Nama Rombel'])->label('Nama Rombel <span class="text-danger">*</span>') ?>

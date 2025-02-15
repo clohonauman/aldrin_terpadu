@@ -30,6 +30,7 @@ class Rombel extends ActiveRecord
             [['ptk', 'nama_rombel', 'semester', 'tingkat_pendidikan', 'jumlah_pembelajaran','mata_pelajaran'], 'required', 'message' => '{attribute} wajib diisi.'],
             [['tingkat_pendidikan', 'jumlah_pembelajaran', 'jumlah_anggota_rombel'], 'integer', 'message' => '{attribute} harus berupa angka.'],
             [['nama'], 'string', 'max' => 30, 'message' => '{attribute} maksimal 30 karakter.'],
+            [['tingkat_pendidikan'], 'in', 'range' => range(1, 9), 'message' => '{attribute} harus antara 1 sampai 9.'],
             [['semester'], 'string', 'max' => 10],
         ];
     }
