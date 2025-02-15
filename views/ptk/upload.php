@@ -91,11 +91,17 @@ $this->title = 'UNGGAH DATA PTK';
             </h1>
         </div>
     </div>
-    <div class="card-header">
-        <div class="col-sm-12 text-right">
-            <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/insert']) ?>" class="btn btn-secondary"><i class="fa fa-plus"></i> TANPA EXCEL</a>
+    <?php
+    if (Yii::$app->session->get('kode_akses')!=3) {
+        ?>
+        <div class="card-header">
+            <div class="col-sm-12 text-right">
+                <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/insert']) ?>" class="btn btn-secondary"><i class="fa fa-plus"></i> TANPA EXCEL</a>
+            </div>
         </div>
-    </div>
+        <?php
+    }
+    ?>
     <div class="card-body">
         <?php date_default_timezone_set("Asia/Jakarta"); ?>
         <section class="content">

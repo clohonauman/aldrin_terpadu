@@ -57,13 +57,23 @@ class PtkController extends BaseController
     
                 $query->andWhere(['<=', 'YEAR(ptk.tanggal_lahir)', $tahun_lahir_maks]);
             }
+            
+            //membatasi akses agar jika operator sekolah hanya menampilkan data di sekolahnya.
+            if (Yii::$app->session->get('kode_akses')==3) {
+                $query->andWhere(['sekolah.npsn' => Yii::$app->session->get('id_sekolah')]);
+            }
     
             $data = $query->all();
             return $this->render('index', ['data' => $data]);
         } else {
             // Filter berdasarkan ptk_id
             $query->andWhere(['ptk.ptk_id' => $ptk_id]);
-    
+
+            //membatasi akses agar jika operator sekolah hanya menampilkan data di sekolahnya.
+            if (Yii::$app->session->get('kode_akses')==3) {
+                $query->andWhere(['sekolah.npsn' => Yii::$app->session->get('id_sekolah')]);
+            }
+            
             $data = $query->one(); // Menggunakan `one()` karena detail seharusnya hanya satu data
     
             return $this->render('detail', ['data' => $data]);
@@ -105,7 +115,7 @@ class PtkController extends BaseController
         $totalData=0;
         $totalSkip=0;
         foreach ($data as $row) {
-            if (isset($row['NIK']) && Ptk::find()->where(['nik' => $row['NIK']])->exists()) {
+            if ((isset($row['NIK']) && Ptk::find()->where(['nik' => $row['NIK']])->exists()) OR $row['Status Tugas']=='Non Induk') {
                 $totalSkip++;
                 $totalData++;
                 continue;
@@ -138,7 +148,7 @@ class PtkController extends BaseController
         }
         $totalSuccess=$totalData-$totalSkip;
         if($totalSkip>0){
-            Yii::$app->session->setFlash('danger', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess.'<br>Gagal: '.$totalSkip.' karena NIK sudah terdaftar.');
+            Yii::$app->session->setFlash('danger', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess.'<br>Gagal: '.$totalSkip.' karena NIK sudah terdaftar/PTK Non Induk.');
         }else{
             Yii::$app->session->setFlash('success', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess);
         }

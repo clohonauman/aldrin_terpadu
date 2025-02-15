@@ -24,7 +24,7 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                     <div class="card alert alert-danger alert-dismissable">
                         <b><i class="fa fa-warning"></i> Perhatian!</b>
                         <p style="font-size:15px">
-                            Pada bagian ini ditampilkan data PTK yang telah dimasukkan oleh pihak sekolah. 
+                            Pada bagian ini ditampilkan data PTK yang telah dimasukkan oleh pihak Dinas Pendidikan. 
                             Jika terdapat data yang tidak lengkap, harap meminta pihak sekolah untuk segera 
                             melengkapinya. Terima kasih.
                         </p>        
@@ -42,34 +42,40 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
             
             <form method="GET">
                 <div class="row">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label><b>Bentuk Pendidikan</b></label>
-                            <select name="bentuk_pendidikan" class="form-control">
-                                <option value="">-- Pilih Bentuk Pendidikan --</option>
-                                <?php foreach ($bentukPendidikanList as $bp) : ?>
-                                    <option value="<?= htmlspecialchars($bp['bentuk_pendidikan']) ?>" 
-                                        <?= isset($_GET['bentuk_pendidikan']) && $_GET['bentuk_pendidikan'] == $bp['bentuk_pendidikan'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($bp['bentuk_pendidikan']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                    <?php
+                    if (Yii::$app->session->get('kode_akses')!=3) {
+                        ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label><b>Bentuk Pendidikan</b></label>
+                                <select name="bentuk_pendidikan" class="form-control">
+                                    <option value="">-- Pilih Bentuk Pendidikan --</option>
+                                    <?php foreach ($bentukPendidikanList as $bp) : ?>
+                                        <option value="<?= htmlspecialchars($bp['bentuk_pendidikan']) ?>" 
+                                            <?= isset($_GET['bentuk_pendidikan']) && $_GET['bentuk_pendidikan'] == $bp['bentuk_pendidikan'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($bp['bentuk_pendidikan']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label><b>Kecamatan</b></label>
-                            <select name="kecamatan" class="form-control">
-                                <option value="">-- Pilih Kecamatan --</option>
-                                <?php foreach ($kecamatanList as $kc) : ?>
-                                    <option value="<?= htmlspecialchars($kc['kecamatan']) ?>" 
-                                        <?= isset($_GET['kecamatan']) && $_GET['kecamatan'] == $kc['kecamatan'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($kc['kecamatan']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label><b>Kecamatan</b></label>
+                                <select name="kecamatan" class="form-control">
+                                    <option value="">-- Pilih Kecamatan --</option>
+                                    <?php foreach ($kecamatanList as $kc) : ?>
+                                        <option value="<?= htmlspecialchars($kc['kecamatan']) ?>" 
+                                            <?= isset($_GET['kecamatan']) && $_GET['kecamatan'] == $kc['kecamatan'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($kc['kecamatan']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                        <?php
+                    }
+                    ?>
                     <div class="row">
                         <div class="col-md-4">
                             <label><b>Jenis Kelamin</b></label>
@@ -116,9 +122,21 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                     <h4><i class="fa fa-user-tie"></i> DAFTAR PTK</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/upload']) ?>" class="btn btn-primary">
-                        <i class="fa fa-plus"></i> DATA
-                    </a>
+                    <?php
+                    if (Yii::$app->session->get('kode_akses')!=3) {
+                        ?>
+                        <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/upload']) ?>" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> DATA
+                        </a>
+                        <?php
+                    }else{
+                        ?>
+                        <a href="<?= Yii::$app->urlManager->createUrl(['/ptk/insert']) ?>" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> DATA
+                        </a>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
             
