@@ -31,7 +31,14 @@ $this->title = 'MASUK | ALDRIN TERPADU';
     <hr>
 
     <div class="form-group">
-        <?= Html::submitButton('Masuk', ['class' => 'btn btn-light col-md-12']) ?>
+        <?= Html::submitButton('Masuk', ['class' => 'btn btn-light col-md-12']) ?><hr>
+
+        <div class="card alert alert-danger alert-dismissable">
+            <b><i class="fa fa-exclamation-triangle"></i> Perhatian!</b>
+            <p style="font-size:15px">
+                Jika anda lupa nama pengguna atau kata sandi silahkan menghubungi admin Aldrin Terpadu. Terima kasih.
+            </p>        
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
