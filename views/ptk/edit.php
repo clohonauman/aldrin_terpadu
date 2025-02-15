@@ -99,7 +99,6 @@ foreach ($jabatanList as $jabatan) {
                             ], ['prompt' => '-Pilih Kewarganegaraan-',
                                 'value' => $data['kewarganegaraan'] ?? ''])->label('Kewarganegaraan <span class="text-danger">*</span>') ?>
                     </div>
-
                 </div>
                 <hr>
                 <h5>DATA DOMISILI</h5>
@@ -140,11 +139,14 @@ foreach ($jabatanList as $jabatan) {
                     <div class="col-md-6">
                         <?= $form->field($model, 'status_kepegawaian')->widget(Select2::classname(), [
                             'data' => $dropdownDataStatusKepegawaian,
+                            'options' => [
+                                'placeholder' => '- Pilih Status Kepegawaian -',
+                                'value' => $data['status_kepegawaian'] ?? '' // Set default value jika ada
+                            ],
                             'pluginOptions' => [
                                 'allowClear' => true
                             ],
-                        ],['prompt' => '- Pilih Status Kepegawaian -',
-                            'value' => $data['status_kepegawaian'] ?? ''])->label('Status Kepegawaian <span class="text-danger">*</span>'); ?>
+                        ])->label('Status Kepegawaian <span class="text-danger">*</span>'); ?>
                     </div>
                     <div class="col-md-6">
                         <?= $form->field($model, 'sk_cpns')->textInput(['value'=>$data['sk_cpns'],'maxlength' => 16, 'placeholder' => 'SK CPNS'])->label('SK CPNS') ?>
@@ -161,29 +163,38 @@ foreach ($jabatanList as $jabatan) {
                     <div class="col-md-6">
                         <?= $form->field($model, 'jabatan')->widget(Select2::classname(), [
                             'data' => $dropdownDataJabatan,
+                            'options' => [
+                                'placeholder' => '- Pilih Jabatan -',
+                                'value' => $data['jabatan'] ?? '' // Set default value jika ada
+                            ],
                             'pluginOptions' => [
                                 'allowClear' => true
                             ],
-                        ],['prompt' => '- Pilih Jabatan -',
-                            'value' => $data['jabatan'] ?? ''])->label('Jabatan <span class="text-danger">*</span>'); ?>
+                        ])->label('Jabatan <span class="text-danger">*</span>'); ?>
                     </div>
                     <div class="col-md-6">
                         <?= $form->field($model, 'npsn')->widget(Select2::classname(), [
                             'data' => $dropdownDataSekolah,
+                            'options' => [
+                                'placeholder' => '- Pilih Sekolah -',
+                                'value' => $data['npsn'] ?? '' // Set default value jika ada
+                            ],
                             'pluginOptions' => [
                                 'allowClear' => true
                             ],
-                        ],['prompt' => '- Pilih Sekolah -',
-                            'value' => $data['npsn'] ?? ''])->label('Sekolah Terdaftar <span class="text-danger">*</span>'); ?>
+                        ])->label('Sekolah Terdaftar <span class="text-danger">*</span>'); ?>
                     </div>
                     <div class="col-md-6">
                         <?= $form->field($model, 'jenis_ptk')->widget(Select2::classname(), [
                             'data' => $dropdownDataJenisPtk,
+                            'options' => [
+                                'placeholder' => '- Pilih Jenis PTK -',
+                                'value' => $data['jenis_ptk'] ?? '' // Default value jika ada
+                            ],
                             'pluginOptions' => [
                                 'allowClear' => true
                             ],
-                        ],['prompt' => '- Pilih Jenis PTK -',
-                            'value' => $data['jenis_ptk'] ?? ''])->label('Jenis PTK <span class="text-danger">*</span>'); ?>
+                        ])->label('Jenis PTK <span class="text-danger">*</span>'); ?>
                     </div>
                 </div>
                 <hr>
