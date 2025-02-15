@@ -131,7 +131,6 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                                 <td><?= htmlspecialchars($pembelajaran['jumlah_anggota_rombel'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($pembelajaran['tingkat_pendidikan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td>
-                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('pembelajaran?id='.htmlspecialchars($pembelajaran['pembelajaran_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
                                     <a class="btn btn-danger" onclick="return confirm('Anda yakin ingin menghapus data ini dan tidak dapat dibatalkan. Lanjutkan?')" href="<?= Yii::$app->urlManager->createUrl('pembelajaran/delete?id='.htmlspecialchars($pembelajaran['pembelajaran_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
