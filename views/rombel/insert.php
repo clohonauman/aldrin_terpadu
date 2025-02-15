@@ -15,10 +15,10 @@ foreach ($ptkList as $ptk) {
     $dropdownDataPTK[$ptk['ptk_id']] = $ptk['nama'] . ' | ' . $ptk['jabatan'];
 }
 
-$mapelList = Yii::$app->db->createCommand("SELECT id, mata_pelajaran FROM mata_pelajaran ORDER BY mata_pelajaran")->queryAll();
+$mapelList = Yii::$app->db->createCommand("SELECT id, mata_pelajaran, jam_pelajaran FROM mata_pelajaran ORDER BY mata_pelajaran")->queryAll();
 $dropdownDataMapel = [];
 foreach ($mapelList as $mapel) {
-    $dropdownDataMapel[$mapel['id']] = $mapel['mata_pelajaran'];
+    $dropdownDataMapel[$mapel['id']] = $mapel['jam_pelajaran'].'JJM | '.$mapel['mata_pelajaran'];
 }
 ?>
 <div class="card">
