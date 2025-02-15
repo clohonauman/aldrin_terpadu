@@ -136,12 +136,18 @@ $roles = [
                                             <p>Data Siswa</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="<?= Yii::$app->urlManager->createUrl(['/mapel']) ?>" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Data Mata Pelajaran</p>
-                                        </a>
-                                    </li>
+                                    <?php
+                                    if(Yii::$app->session->get('kode_akses')!=3){
+                                        ?>
+                                        <li class="nav-item">
+                                            <a href="<?= Yii::$app->urlManager->createUrl(['/mapel']) ?>" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Data Mata Pelajaran</p>
+                                            </a>
+                                        </li>
+                                        <?php
+                                    }
+                                    ?>
                                     <li class="nav-item">
                                         <a href="<?= Yii::$app->urlManager->createUrl(['/rombel']) ?>" class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
@@ -168,12 +174,18 @@ $roles = [
                                     <p>Analisis Keb. Guru</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="<?= Yii::$app->urlManager->createUrl(['/manajemen_pengguna']) ?>" class="nav-link">
-                                    <i class="nav-icon fas fa-users-cog"></i>
-                                    <p>Manajemen Pengguna</p>
-                                </a>
-                            </li>
+                            <?php
+                            if(Yii::$app->session->get('kode_akses')==0){
+                                ?>
+                                <li class="nav-item">
+                                    <a href="<?= Yii::$app->urlManager->createUrl(['/manajemen_pengguna']) ?>" class="nav-link">
+                                        <i class="nav-icon fas fa-users-cog"></i>
+                                        <p>Manajemen Pengguna</p>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                            ?>
                             <li class="nav-header"><hr></li>
                             <li class="nav-item">
                                 <a href="<?= Yii::$app->urlManager->createUrl(['/profil']) ?>" class="nav-link">
