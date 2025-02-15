@@ -184,6 +184,7 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                                 <td>
                                     <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
                                     <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('ptk/edit?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus PTK a/n <?=$ptk['nama']?>? Jika iya maka tidak dapat dibatalkan lagi. Lanjutkan?')" href="<?= Yii::$app->urlManager->createUrl('ptk/delete?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

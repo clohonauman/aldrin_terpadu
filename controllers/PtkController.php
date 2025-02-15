@@ -115,7 +115,7 @@ class PtkController extends BaseController
         } else {
             if (empty($ptk_id) OR Yii::$app->session->get('kode_akses')!=3) {
                 Yii::$app->session->setFlash('error', 'Maaf terjadi kesalahan saat meminta data. Silahkan coba kembali atau hubungi admin Aldrin Terpadu. Terima kasih.');
-                // return $this->render('/ptk');
+                return $this->redirect(['index']);
             } else {
                 $model=new UploadForm;
                 $query = (new \yii\db\Query())
@@ -140,6 +140,43 @@ class PtkController extends BaseController
             }
         }
     }
+
+    public function actionDelete()
+    {
+        $ptk_id = Yii::$app->request->get('id', ''); // Ambil ID dari GET request
+        $ptk_id = \yii\helpers\Html::encode($ptk_id); // Mencegah XSS
+    
+        // Cek validitas ptk_id dan hak akses
+        if (empty($ptk_id) || Yii::$app->session->get('kode_akses') != 3) {
+            Yii::$app->session->setFlash('error', 'Maaf terjadi kesalahan saat meminta data. Silahkan coba kembali atau hubungi admin Aldrin Terpadu. Terima kasih.');
+            return $this->redirect(['index']);
+        }
+    
+        // Cek apakah data PTK ada
+        $ptk = Ptk::findOne($ptk_id);
+        if (!$ptk) {
+            Yii::$app->session->setFlash('error', 'Data PTK tidak ditemukan.');
+            return $this->redirect(['index']);
+        }
+    
+        // Gunakan transaksi untuk keamanan
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($ptk->delete() !== false) {
+                $transaction->commit();
+                Yii::$app->session->setFlash('success', 'Data PTK berhasil dihapus.');
+            } else {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', 'Gagal menghapus data PTK.');
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    
+        return $this->redirect(['index']);
+    }
+    
 
     protected function importExcel($tempFilePath)
     {
