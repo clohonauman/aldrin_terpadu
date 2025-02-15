@@ -73,80 +73,54 @@ $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sek
             <div class="table-responsive">
                 <table id="myTable" class="table table-striped table-bordered">
                     <thead>
-                        <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Mata Pelajaran</th>
-                            <?php for ($kelas = 1; $kelas <= 9; $kelas++): ?>
-                                <th colspan="3" class="text-center">Tingkat <?= $kelas ?></th>
-                            <?php endfor; ?>
-                            <th rowspan="2">Rasio</th>
-                            <th rowspan="2">Rasio Rounded</th>
-                            <th colspan="4" class="text-center">Jumlah PTK (Existing)</th>
-                            <th rowspan="2">Kebutuhan</th>
-                            <th rowspan="2">Analisis</th>
-                        </tr>
-                        <tr>
-                            <?php for ($kelas = 1; $kelas <= 9; $kelas++): ?>
-                                <th>JJM</th>
-                                <th>ROMBEL</th>
-                                <th>HASIL</th>
-                            <?php endfor; ?>
-                            <th>PNS</th>
-                            <th>PPPK</th>
-                            <th>NON ASN</th>
-                            <th>TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $no = 1;
-                        foreach ($data as $mapel): 
-                            $mataPelajaranId = $mapel['mata_pelajaran_id'];
-                            $totalHasil = 0;
-                            ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $mapel['nama_mapel'] ?></td>
-
-                                <?php for ($kelas = 1; $kelas <= 9; $kelas++): 
-                                    $jjm = $mapel['jam_mengajar_per_minggu'] ?? 0;
-                                    $rombel = $rombelData[$kelas][$mataPelajaranId]['jumlah_rombel'] ?? 0;
-                                    $hasil = $jjm * $rombel;
-                                    $totalHasil += $hasil;
-                                ?>
-                                    <td><?= $jjm ?></td>
-                                    <td><?= $rombel ?></td>
-                                    <td><?= $hasil ?></td>
-                                <?php endfor; ?>
-
-                                <?php 
-                                $rasio = $totalHasil / 24;
-                                $rasioRounded = round($rasio);
-
-                                // Pastikan data PTK tidak duplikasi
-                                $ptk = $ptkData[$mataPelajaranId] ?? ['pns' => 0, 'pppk' => 0, 'non_asn' => 0, 'total_ptk' => 0];
-                                $kebutuhan = $rasioRounded - $ptk['total_ptk'];
-                                ?>
-
-                                <td><?= number_format($rasio, 2) ?></td>
-                                <td><?= $rasioRounded ?></td>
-
-                                <td><?= $ptk['pns'] ?></td>
-                                <td><?= $ptk['pppk'] ?></td>
-                                <td><?= $ptk['non_asn'] ?></td>
-                                <td><?= $ptk['total_ptk'] ?></td>
-
-                                <td><?= $kebutuhan ?></td>
-                                <td class="<?= ($kebutuhan < 0) ? 'text-success' : 'text-danger' ?>">
-                                    <?= ($kebutuhan < 0) ? 
-                                        "Kelebihan " . abs($kebutuhan) . " PTK" : 
-                                        "Kekurangan " . $kebutuhan . " PTK" ?>
-                                </td>
-                            </tr>
-                            <?php 
-                        endforeach; ?>
-                    </tbody>
-                </table>
+        <tr>
+            <th rowspan="2">No</th>
+            <th rowspan="2">Mata Pelajaran</th>
+            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                <th colspan="3">Tingkat <?= $i ?></th>
+            <?php endfor; ?>
+            <th rowspan="2">Total Hasil</th>
+            <th rowspan="2">Rasio</th>
+            <th rowspan="2">Rasio Rounded</th>
+            <th colspan="4">Jumlah PTK (Existing)</th>
+            <th rowspan="2">Kebutuhan</th>
+            <!-- <th rowspan="2">Analisis</th> -->
+        </tr>
+        <tr>
+            <?php for ($i = 1; $i <= 9; $i++) : ?>
+                <th>JJM</th>
+                <th>ROMBEL</th>
+                <th>HASIL</th>
+            <?php endfor; ?>
+            <th>PNS</th>
+            <th>PPPK</th>
+            <th>NON ASN</th>
+            <th>TOTAL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $no = 1; ?>
+        <?php foreach ($data as $mapel) : ?>
+            <tr>
+                <td><?= $no++ ?></td>
+                <td><?= $mapel['nama_mapel'] ?></td>
+                <?php foreach ($mapel['tingkat_pendidikan'] as $tingkat) : ?>
+                    <td><?= $tingkat['total_jam_mengajar'] ?></td>
+                    <td><?= $tingkat['jumlah_rombel'] ?></td>
+                    <td><?= $tingkat['total_jam_mengajar'] * ($tingkat['jumlah_rombel'] ?: 1) ?></td>
+                <?php endforeach; ?>
+                <td><?= $mapel['total_hasil'] ?></td> <!-- Rasio -->
+                <td><?= $mapel['rasio'] ?></td> <!-- Rasio -->
+                <td><?= $mapel['rasio_rounded'] ?></td> <!-- Rasio Rounded -->
+                <td><?= $mapel['pns'] ?></td> <!-- PNS -->
+                <td><?= $mapel['pppk'] ?></td> <!-- PPPK -->
+                <td><?= $mapel['non_asn'] ?></td> <!-- NON ASN -->
+                <td><?= $mapel['total_ptk'] ?></td> <!-- TOTAL -->
+                <td><?= $mapel['rasio_rounded']-$mapel['total_ptk'] ?></td> <!-- Kebutuhan -->
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
             </div>
         </section>
     </div>

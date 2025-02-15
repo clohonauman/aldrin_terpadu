@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Pembelajaran;
 use app\models\Rombel;
 use yii\web\Controller;
 use app\components\BaseController;
@@ -108,9 +109,9 @@ class RombelController extends BaseController
             return $this->redirect(['index']);
         }
     
-        // Cek apakah data PTK ada
-        $ptk = Rombel::findOne($rombongan_belajar_id);
-        if (!$ptk) {
+        // Cek apakah data Rombel ada
+        $rombel = Rombel::findOne($rombongan_belajar_id);
+        if (!$rombel) {
             Yii::$app->session->setFlash('error', 'Data Rombel tidak ditemukan.');
             return $this->redirect(['index']);
         }
@@ -118,9 +119,13 @@ class RombelController extends BaseController
         // Gunakan transaksi untuk keamanan
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            if ($ptk->delete() !== false) {
+            // Hapus semua data pembelajaran yang memiliki rombongan_belajar_id yang sama
+            Pembelajaran::deleteAll(['rombongan_belajar_id' => $rombongan_belajar_id]);
+    
+            // Hapus data rombongan_belajar setelah data pembelajaran dihapus
+            if ($rombel->delete() !== false) {
                 $transaction->commit();
-                Yii::$app->session->setFlash('success', 'Data Rombel berhasil dihapus.');
+                Yii::$app->session->setFlash('success', 'Data Rombel dan pembelajaran terkait berhasil dihapus.');
             } else {
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('error', 'Gagal menghapus data Rombel.');
@@ -131,7 +136,7 @@ class RombelController extends BaseController
         }
     
         return $this->redirect(['index']);
-    }
+    }    
 
     protected function importManual($postData)
     {
