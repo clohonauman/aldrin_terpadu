@@ -97,6 +97,42 @@ class RombelController extends BaseController
         }
     }
 
+    public function actionDelete()
+    {
+        $rombongan_belajar_id = Yii::$app->request->get('id', ''); // Ambil ID dari GET request
+        $rombongan_belajar_id = \yii\helpers\Html::encode($rombongan_belajar_id); // Mencegah XSS
+    
+        // Cek validitas rombongan_belajar_id dan hak akses
+        if (empty($rombongan_belajar_id) || Yii::$app->session->get('kode_akses') != 3) {
+            Yii::$app->session->setFlash('error', 'Maaf terjadi kesalahan saat meminta data. Silahkan coba kembali atau hubungi admin Aldrin Terpadu. Terima kasih.');
+            return $this->redirect(['index']);
+        }
+    
+        // Cek apakah data PTK ada
+        $ptk = Rombel::findOne($rombongan_belajar_id);
+        if (!$ptk) {
+            Yii::$app->session->setFlash('error', 'Data Rombel tidak ditemukan.');
+            return $this->redirect(['index']);
+        }
+    
+        // Gunakan transaksi untuk keamanan
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if ($ptk->delete() !== false) {
+                $transaction->commit();
+                Yii::$app->session->setFlash('success', 'Data Rombel berhasil dihapus.');
+            } else {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', 'Gagal menghapus data Rombel.');
+            }
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    
+        return $this->redirect(['index']);
+    }
+
     protected function importManual($postData)
     {
         if (

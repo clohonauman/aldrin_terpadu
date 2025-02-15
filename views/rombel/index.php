@@ -130,7 +130,10 @@ $kecamatanList = Yii::$app->db->createCommand("SELECT DISTINCT kecamatan FROM se
                                 <td><?= htmlspecialchars($rombel['jumlah_pembelajaran'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($rombel['jumlah_anggota_rombel'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($rombel['tingkat_pendidikan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
-                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('rombel?id='.htmlspecialchars($rombel['rombongan_belajar_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a></td>
+                                <td>
+                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('rombel?id='.htmlspecialchars($rombel['rombongan_belajar_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-danger" onclick="return confirm('Anda yakin ingin menghapus data ini dan tidak bisa dibatalkan. Lanjutkan?')" href="<?= Yii::$app->urlManager->createUrl('rombel/delete?id='.htmlspecialchars($rombel['rombongan_belajar_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-trash"></i></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
