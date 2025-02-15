@@ -17,7 +17,6 @@ class m250215_023837_pembelajaran extends Migration
             'rombongan_belajar_id' => $this->char(36)->null(),
             'mata_pelajaran_id' => $this->integer(11)->null(),
             'ptk_id' => $this->char(36)->null(),
-            'nama_ptk' => $this->string(255)->null(),
             'sk_mengajar' => $this->string(100)->null(),
             'tanggal_sk_mengajar' => $this->char(10)->null(),
             'jam_mengajar_per_minggu' => $this->integer(11)->null(),
