@@ -78,7 +78,7 @@ class PembelajaranController extends BaseController
             return $this->redirect(['index']);
         }
     
-        // Cek apakah data PTK ada
+        // Cek apakah data pembelajaran ada
         $pembelajaran = Pembelajaran::findOne($pembelajaran_id);
         if (!$pembelajaran) {
             Yii::$app->session->setFlash('error', 'Data pembelajaran tidak ditemukan.');
