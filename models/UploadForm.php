@@ -77,7 +77,8 @@ class UploadForm extends Model
             ], 'required'],
 
             [['nama', 'nuptk', 'tempat_lahir', 'jabatan','jenis_kelamin'], 'string', 'max' => 255],
-            [['nik','nuptk','nip','nokk'], 'string', 'max' => 16],
+            [['nip'], 'string', 'max' => 20],
+            [['nik','nuptk','nokk'], 'string', 'max' => 16],
             [['tanggal_lahir','tmt_pengangkatan','tgl_cpns'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }

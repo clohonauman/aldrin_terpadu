@@ -181,7 +181,10 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                                 <td><?= htmlspecialchars($ptk['usia_sekarang'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($ptk['status_kepegawaian'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($ptk['jabatan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
-                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a></td>
+                                <td>
+                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('ptk/edit?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-edit"></i></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -103,9 +103,43 @@ class PtkController extends BaseController
         } else {
             return $this->render('insert', ['model' => $model]);
         }
-        
     }
-    
+
+    public function actionEdit()
+    {
+        $ptk_id = Yii::$app->request->get('id', ''); // Default value jika tidak ada 'ptk'
+        $ptk_id = \yii\helpers\Html::encode($ptk_id); // Mencegah XSS
+        if (Yii::$app->request->isPost) {
+            $postData = Yii::$app->request->post('UploadForm');
+            return $this->updatedManual($postData,$ptk_id);
+        } else {
+            if (empty($ptk_id) OR Yii::$app->session->get('kode_akses')!=3) {
+                Yii::$app->session->setFlash('error', 'Maaf terjadi kesalahan saat meminta data. Silahkan coba kembali atau hubungi admin Aldrin Terpadu. Terima kasih.');
+                // return $this->render('/ptk');
+            } else {
+                $model=new UploadForm;
+                $query = (new \yii\db\Query())
+                    ->select([
+                        'ptk.*',
+                        'sekolah.npsn',
+                        'sekolah.nama AS nama_sekolah',
+                        'sekolah.bentuk_pendidikan',
+                        'sekolah.status_sekolah',
+                        'sekolah.kecamatan',
+                        'TIMESTAMPDIFF(YEAR, ptk.tanggal_lahir, CURDATE()) AS usia_sekarang' // Menghitung usia saat ini
+                    ])
+                    ->from('ptk')
+                    ->leftJoin('sekolah', 'sekolah.npsn = ptk.sekolah_id');
+                $query->andWhere(['ptk.ptk_id' => $ptk_id]);
+                $query->andWhere(['sekolah.npsn' => Yii::$app->session->get('id_sekolah')]);
+                $data = $query->one();
+                return $this->render('edit', [
+                                                'data' => $data,
+                                                'model' => $model
+                                            ]);
+            }
+        }
+    }
 
     protected function importExcel($tempFilePath)
     {
@@ -193,6 +227,58 @@ class PtkController extends BaseController
             return $this->redirect(['upload']);
         }
     }
+
+    protected function updatedManual($postData, $ptk_id)
+    {
+        // Cek apakah NIK sudah terdaftar dan bukan milik PTK yang sedang diperbarui
+        if (isset($postData['nik']) && Ptk::find()->where(['nik' => $postData['nik']])->andWhere(['!=', 'ptk_id', $ptk_id])->exists()) {
+            Yii::$app->session->setFlash('error', 'NIK sudah terdaftar.');
+            return $this->redirect(['ptk']);
+        }
+    
+        // Cari data PTK berdasarkan ID
+        $ptk = Ptk::findOne($ptk_id);
+        if (!$ptk) {
+            Yii::$app->session->setFlash('error', 'Data PTK tidak ditemukan.');
+            return $this->redirect(['index']);
+        }
+    
+        // Update data PTK
+        $ptk->nama = $postData['nama'] ?? $ptk->nama;
+        $ptk->nik = $postData['nik'] ?? $ptk->nik;
+        $ptk->no_kk = $postData['no_kk'] ?? $ptk->no_kk;
+        $ptk->nuptk = isset($postData['nuptk']) ? trim($postData['nuptk']) : $ptk->nuptk;
+        $ptk->nip = $postData['nip'] ?? $ptk->nip;
+        $ptk->jenis_kelamin = $postData['jenis_kelamin'] ?? $ptk->jenis_kelamin;
+        $ptk->tempat_lahir = $postData['tempat_lahir'] ?? $ptk->tempat_lahir;
+        $ptk->tanggal_lahir = isset($postData['tanggal_lahir']) ? date('Y-m-d', strtotime($postData['tanggal_lahir'])) : $ptk->tanggal_lahir;
+        $ptk->sekolah_id = $postData['npsn'] ?? $ptk->sekolah_id;
+        $ptk->kewarganegaraan = $postData['kewarganegaraan'] ?? $ptk->kewarganegaraan;
+        $ptk->rt = $postData['rt'] ?? $ptk->rt;
+        $ptk->rw = $postData['rw'] ?? $ptk->rw;
+        $ptk->desa_kelurahan = $postData['desa_kelurahan'] ?? $ptk->desa_kelurahan;
+        $ptk->kecamatan = $postData['kecamatan'] ?? $ptk->kecamatan;
+        $ptk->kabupaten = $postData['kabupaten'] ?? $ptk->kabupaten;
+        $ptk->provinsi = $postData['provinsi'] ?? $ptk->provinsi;
+        $ptk->no_hp = $postData['no_hp'] ?? $ptk->no_hp;
+        $ptk->email = $postData['email'] ?? $ptk->email;
+        $ptk->sk_cpns = $postData['sk_cpns'] ?? $ptk->sk_cpns;
+        $ptk->tgl_cpns = isset($postData['tgl_cpns']) ? date('Y-m-d', strtotime($postData['tgl_cpns'])) : $ptk->tgl_cpns;
+        $ptk->sk_pengangkatan = $postData['sk_pengangkatan'] ?? $ptk->sk_pengangkatan;
+        $ptk->tmt_pengangkatan = isset($postData['tmt_pengangkatan']) ? date('Y-m-d', strtotime($postData['tmt_pengangkatan'])) : $ptk->tmt_pengangkatan;
+        $ptk->jenis_ptk = $postData['jenis_ptk'] ?? $ptk->jenis_ptk;
+        $ptk->jabatan = $postData['jabatan'] ?? $ptk->jabatan;
+        $ptk->status_kepegawaian = $postData['status_kepegawaian'] ?? $ptk->status_kepegawaian;
+        $ptk->pangkat_golongan = $postData['pangkat_golongan'] ?? $ptk->pangkat_golongan;
+    
+        if ($ptk->save()) {
+            Yii::$app->session->setFlash('success', 'Data berhasil diperbarui.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
+        
+        return $this->redirect(['index']);
+    }    
     
     private function generateUuid()
     {
