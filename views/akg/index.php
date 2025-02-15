@@ -1,4 +1,7 @@
 <?php
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 /** @var yii\web\View $this */
 $this->title = 'DATA PTK';
 
@@ -28,19 +31,17 @@ $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sek
                 <div class="row">
                     <div class="row">
                         <div class="col-md-4">
-                            <label><b>Sekolah</b></label>
-                            <select name="id" class="form-control">
-                                <option value="">-- Pilih Sekolah --</option>
-                                <?php foreach ($sekolahList as $bp) : ?>
-                                    <option value="<?= htmlspecialchars($bp['npsn']) ?>" 
-                                        <?= isset($_GET['npsn']) && $_GET['npsn'] == $bp['npsn'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($bp['nama']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label><b>Sekolah <span class="text-danger">*</span></b></label>
+                            <?= Select2::widget([
+                                'name' => 'id',
+                                'data' => ArrayHelper::map($sekolahList, 'npsn', 'nama'),
+                                'options' => ['placeholder' => '- Pilih Sekolah -'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]); ?>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-auto">
                             <label>&nbsp;</label>
@@ -49,7 +50,6 @@ $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sek
                     </div>
                 </div>
             </form>
-
             <hr>
             <?php
         }
