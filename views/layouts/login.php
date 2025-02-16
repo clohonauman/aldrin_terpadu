@@ -4,6 +4,7 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use app\widgets\Alert;
 use yii\bootstrap5\Html;
 
 AppAsset::register($this);
@@ -72,6 +73,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <img class="w-100 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
     </div>
     <hr>
+    <?= Alert::widget() ?>
     <?= $content ?>
 </div>
 

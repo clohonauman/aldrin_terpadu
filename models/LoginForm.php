@@ -67,7 +67,7 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Akun::find()->where(['nama_pengguna' => $this->nama_pengguna])->with('peran')->one();
+            $this->_user = Akun::find()->where(['nama_pengguna' => $this->nama_pengguna])->where(['status' => 'aktif'])->with('peran')->one();
         }
         return $this->_user;
     }
