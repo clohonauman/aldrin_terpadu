@@ -3,13 +3,13 @@
 namespace app\controllers;
 
 use Yii;
-use yii\web\Controller;
+use app\components\BaseController;
 use app\models\Pembelajaran;
 use app\models\MataPelajaran as Mapel;
 use app\models\RombonganBelajar;
 use app\models\Ptk;
 
-class AkgController extends Controller
+class AkgController extends BaseController
 {
     public function actionIndex()
     {

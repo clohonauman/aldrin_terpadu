@@ -1,8 +1,9 @@
 <?php
 
 namespace app\controllers;
+use app\components\BaseController;
 
-class Manajemen_penggunaController extends \yii\web\Controller
+class Manajemen_penggunaController extends BaseController
 {
     public function actionIndex()
     {
