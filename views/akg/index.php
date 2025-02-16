@@ -71,70 +71,74 @@ $sekolahList = Yii::$app->db->createCommand("SELECT DISTINCT npsn, nama FROM sek
             <hr>
             <!-- Tabel Data PTK -->
             <div class="table-responsive">
-                <table id="myTable_akg" class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th rowspan="2" class="text-center">No</th>
-                            <th rowspan="2" class="text-center">Mata Pelajaran</th>
-                            <?php for ($i = 1; $i <= 9; $i++) : ?>
-                                <th colspan="3" class="text-center">Tingkat <?= $i ?></th>
-                            <?php endfor; ?>
-                            <th rowspan="2" class="text-center">Total Hasil</th>
-                            <th rowspan="2" class="text-center">Rasio</th>
-                            <th rowspan="2" class="text-center">Rasio Rounded</th>
-                            <th colspan="4" class="text-center">Jumlah PTK (Existing)</th>
-                            <th rowspan="2" class="text-center">Kebutuhan</th>
-                            <th rowspan="2" class="text-center">Analisis</th>
-                        </tr>
-                        <tr>
-                            <?php for ($i = 1; $i <= 9; $i++) : ?>
-                                <th>JJM</th>
-                                <th>ROMBEL</th>
-                                <th>HASIL</th>
-                            <?php endfor; ?>
-                            <th>PNS</th>
-                            <th>PPPK</th>
-                            <th>NON ASN</th>
-                            <th>TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $no = 1; ?>
-                        <?php foreach ($data as $mapel) : ?>
+                <?php if (!empty($data)) : ?>
+                    <table id="myTable_akg" class="table table-striped table-bordered">
+                        <thead>
                             <tr>
-                                <td class="text-center"><?= $no++ ?></td>
-                                <td><?= $mapel['nama_mapel'] ?></td>
-                                <?php foreach ($mapel['tingkat_pendidikan'] as $tingkat) : ?>
-                                    <td class="text-center"><?= $tingkat['total_jam_mengajar'] ?? 0; ?></td>
-                                    <td class="text-center"><?= $tingkat['jumlah_rombel'] ?></td>
-                                    <td class="text-center"><?= $tingkat['total_jam_mengajar'] * ($tingkat['jumlah_rombel'] ?: 1) ?></td>
-                                <?php endforeach; ?>
-                                <td class="text-center"><?= $mapel['total_hasil'] ?></td> <!-- Rasio -->
-                                <td class="text-center"><?= number_format($mapel['rasio'], 4) ?></td> <!-- Rasio -->
-                                <td class="text-center"><?= $mapel['rasio_rounded'] ?></td> <!-- Rasio Rounded -->
-                                <td class="text-center"><?= $mapel['pns'] ?></td> <!-- PNS -->
-                                <td class="text-center"><?= $mapel['pppk'] ?></td> <!-- PPPK -->
-                                <td class="text-center"><?= $mapel['non_asn'] ?></td> <!-- NON ASN -->
-                                <td class="text-center"><?= $mapel['total_ptk'] ?></td> <!-- TOTAL -->
-                                <td class="text-center"><?= $mapel['rasio_rounded']-$mapel['total_ptk'] ?></td> <!-- Kebutuhan -->
-                                <td>  <!-- Analisis -->
-                                    <?php 
-                                        $selisih = $mapel['rasio_rounded'] - $mapel['total_ptk'];
-                                        if ($selisih > 0) {
-                                            echo "Kurang $selisih PTK.";
-                                        } elseif ($selisih < 0) {
-                                            echo "Lebih " . abs($selisih) . " PTK.";
-                                        } else {
-                                            echo "Sudah Sesuai.";
-                                        }
-                                    ?>
-                                </td>
-
+                                <th rowspan="2" class="text-center">No</th>
+                                <th rowspan="2" class="text-center">Mata Pelajaran</th>
+                                <?php for ($i = 1; $i <= 9; $i++) : ?>
+                                    <th colspan="3" class="text-center">Tingkat <?= $i ?></th>
+                                <?php endfor; ?>
+                                <th rowspan="2" class="text-center">Total Hasil</th>
+                                <th rowspan="2" class="text-center">Rasio</th>
+                                <th rowspan="2" class="text-center">Rasio Rounded</th>
+                                <th colspan="4" class="text-center">Jumlah PTK (Existing)</th>
+                                <th rowspan="2" class="text-center">Kebutuhan</th>
+                                <th rowspan="2" class="text-center">Analisis</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <tr>
+                                <?php for ($i = 1; $i <= 9; $i++) : ?>
+                                    <th>JJM</th>
+                                    <th>ROMBEL</th>
+                                    <th>HASIL</th>
+                                <?php endfor; ?>
+                                <th>PNS</th>
+                                <th>PPPK</th>
+                                <th>NON ASN</th>
+                                <th>TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 1; ?>
+                            <?php foreach ($data as $mapel) : ?>
+                                <tr>
+                                    <td class="text-center"><?= $no++ ?></td>
+                                    <td><?= $mapel['nama_mapel'] ?></td>
+                                    <?php foreach ($mapel['tingkat_pendidikan'] as $tingkat) : ?>
+                                        <td class="text-center"><?= $tingkat['total_jam_mengajar'] ?? 0; ?></td>
+                                        <td class="text-center"><?= $tingkat['jumlah_rombel'] ?></td>
+                                        <td class="text-center"><?= $tingkat['total_jam_mengajar'] * ($tingkat['jumlah_rombel'] ?: 1) ?></td>
+                                    <?php endforeach; ?>
+                                    <td class="text-center"><?= $mapel['total_hasil'] ?></td> <!-- Total Hasil -->
+                                    <td class="text-center"><?= number_format($mapel['rasio'], 4) ?></td> <!-- Rasio -->
+                                    <td class="text-center"><?= $mapel['rasio_rounded'] ?></td> <!-- Rasio Rounded -->
+                                    <td class="text-center"><?= $mapel['pns'] ?></td> <!-- PNS -->
+                                    <td class="text-center"><?= $mapel['pppk'] ?></td> <!-- PPPK -->
+                                    <td class="text-center"><?= $mapel['non_asn'] ?></td> <!-- NON ASN -->
+                                    <td class="text-center"><?= $mapel['total_ptk'] ?></td> <!-- TOTAL -->
+                                    <td class="text-center"><?= $mapel['rasio_rounded'] - $mapel['total_ptk'] ?></td> <!-- Kebutuhan -->
+                                    <td>  <!-- Analisis -->
+                                        <?php 
+                                            $selisih = $mapel['rasio_rounded'] - $mapel['total_ptk'];
+                                            if ($selisih > 0) {
+                                                echo "Kurang $selisih PTK.";
+                                            } elseif ($selisih < 0) {
+                                                echo "Lebih " . abs($selisih) . " PTK.";
+                                            } else {
+                                                echo "Sudah Sesuai.";
+                                            }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else : ?>
+                    <p class="text-center text-danger font-weight-bold">Tidak ada data atau anda belum memilih sekolah</p>
+                <?php endif; ?>
             </div>
+
             <button class="btn btn-success" onclick="exportToExcel()"><i class="fa fa-download"></i> XLSX</button>
             <script>
                 function exportToExcel() {
