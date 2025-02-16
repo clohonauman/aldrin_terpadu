@@ -108,7 +108,7 @@ $roles = [
                     <p class="fst-italic fs-6 mt-0"><?= isset($roles[$kodeAkses]) ? $roles[$kodeAkses] : 'Tidak Diketahui'; ?></p>
                 </a>
 
-                <div class="sidebar">
+                <div class="sidebar overflow-auto">
                     <nav class="mt-2">
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
                             <li class="nav-item">
