@@ -46,7 +46,7 @@ class LoginForm extends Model
             $session->set('id_sekolah', $user->peran->id_sekolah);
             $kode_akses = $session->get('kode_akses');
 
-            if (!in_array($kode_akses, [0, 1, 3])) {
+            if (!in_array($kode_akses, [0, 2, 3])) {
                 $session->destroy();
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, base_url('/login/logout'));

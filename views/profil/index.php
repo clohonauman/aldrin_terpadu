@@ -7,7 +7,7 @@ function getJabatan($kodeAkses= null) {
     switch ($kodeAkses) {
         case 0:
             return "Super Admin";
-        case 1:
+        case 2:
             return "Admin";
         case 3:
             return "Operator Sekolah";
