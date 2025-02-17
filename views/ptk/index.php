@@ -182,9 +182,26 @@ $jkList = Yii::$app->db->createCommand("SELECT DISTINCT jenis_kelamin FROM ptk")
                                 <td><?= htmlspecialchars($ptk['status_kepegawaian'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($ptk['jabatan'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td>
-                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
-                                    <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('ptk/edit?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-edit"></i></a>
-                                    <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus PTK a/n <?=$ptk['nama']?>? Jika iya maka tidak dapat dibatalkan lagi. Lanjutkan?')" href="<?= Yii::$app->urlManager->createUrl('ptk/delete?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-trash"></i></a>
+                                    <?php
+                                    if (Yii::$app->session->get('kode_akses')==0) {
+                                        ?>
+                                        <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('ptk/edit?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin ingin menghapus PTK a/n <?=$ptk['nama']?>? Jika iya maka tidak dapat dibatalkan lagi. Lanjutkan?')" href="<?= Yii::$app->urlManager->createUrl('ptk/delete?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-trash"></i></a>
+                                        <?php
+                                    }
+                                    elseif (Yii::$app->session->get('kode_akses')==2) {
+                                        ?>
+                                        <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
+                                        <?php
+                                    }
+                                    elseif (Yii::$app->session->get('kode_akses')==3) {
+                                        ?>
+                                        <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('ptk?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-eye"></i></a>
+                                        <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('ptk/edit?id='.htmlspecialchars($ptk['ptk_id'] ?? '', ENT_QUOTES, 'UTF-8')) ?>"><i class="fa fa-edit"></i></a>
+                                        <?php
+                                    }
+                                    ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

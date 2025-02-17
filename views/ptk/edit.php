@@ -196,6 +196,24 @@ foreach ($jabatanList as $jabatan) {
                             ],
                         ])->label('Jenis PTK <span class="text-danger">*</span>'); ?>
                     </div>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'data_status')->widget(Select2::classname(), [
+                            'data' => [
+                                1=>'Aktif',
+                                2=>'Pensiun',
+                                3=>'Meninggal Dunia',
+                                4=>'Lainnya',
+                            ],
+                            'options' => [
+                                'placeholder' => '- Pilih Status Keaktifan PTK -',
+                                'value' => $data['data_status'] ?? '' // Default value jika ada
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ])->label('Status Keaktifan PTK <span class="text-danger">*</span>'); ?>
+                    </div>
                 </div>
                 <hr>
                 <div class="row">

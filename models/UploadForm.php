@@ -43,6 +43,7 @@ class UploadForm extends Model
     public $lembaga_pengangkat;
     public $sumber_gaji;
     public $nama_ibu_kandung;
+    public $data_status;
 
     public function rules()
     {
@@ -74,7 +75,8 @@ class UploadForm extends Model
                 'lembaga_pengangkat',
                 'sumber_gaji',
                 'nama_ibu_kandung',
-            ], 'required'],
+                'data_status',
+            ], 'required', 'message' => '* {attribute} wajib diisi.'],
 
             [['nama', 'nuptk', 'tempat_lahir', 'jabatan','jenis_kelamin'], 'string', 'max' => 255],
             [['nip'], 'string', 'max' => 20],

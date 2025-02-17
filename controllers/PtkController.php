@@ -140,44 +140,7 @@ class PtkController extends BaseController
             }
         }
     }
-
-    public function actionDelete()
-    {
-        $ptk_id = Yii::$app->request->get('id', ''); // Ambil ID dari GET request
-        $ptk_id = \yii\helpers\Html::encode($ptk_id); // Mencegah XSS
     
-        // Cek validitas ptk_id dan hak akses
-        if (empty($ptk_id) || Yii::$app->session->get('kode_akses') != 3) {
-            Yii::$app->session->setFlash('error', 'Maaf terjadi kesalahan saat meminta data. Silahkan coba kembali atau hubungi admin Aldrin Terpadu. Terima kasih.');
-            return $this->redirect(['index']);
-        }
-    
-        // Cek apakah data PTK ada
-        $ptk = Ptk::findOne($ptk_id);
-        if (!$ptk) {
-            Yii::$app->session->setFlash('error', 'Data PTK tidak ditemukan.');
-            return $this->redirect(['index']);
-        }
-    
-        // Gunakan transaksi untuk keamanan
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-            if ($ptk->delete() !== false) {
-                $transaction->commit();
-                Yii::$app->session->setFlash('success', 'Data PTK berhasil dihapus.');
-            } else {
-                $transaction->rollBack();
-                Yii::$app->session->setFlash('error', 'Gagal menghapus data PTK.');
-            }
-        } catch (\Exception $e) {
-            $transaction->rollBack();
-            Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
-    
-        return $this->redirect(['index']);
-    }
-    
-
     protected function importExcel($tempFilePath)
     {
         $data = Excel::import($tempFilePath, [
@@ -307,6 +270,7 @@ class PtkController extends BaseController
         $ptk->jabatan = $postData['jabatan'] ?? $ptk->jabatan;
         $ptk->status_kepegawaian = $postData['status_kepegawaian'] ?? $ptk->status_kepegawaian;
         $ptk->pangkat_golongan = $postData['pangkat_golongan'] ?? $ptk->pangkat_golongan;
+        $ptk->data_status = $postData['data_status'] ?? $ptk->data_status;
     
         if ($ptk->save()) {
             Yii::$app->session->setFlash('success', 'Data berhasil diperbarui.');
@@ -315,7 +279,42 @@ class PtkController extends BaseController
         }
         
         return $this->redirect(['index']);
-    }    
+    }  
+
+    public function actionDelete()
+    {
+        $ptk_id = Yii::$app->request->get('id', ''); // Ambil ID dari GET request
+        $ptk_id = \yii\helpers\Html::encode($ptk_id); // Mencegah XSS
+    
+        // Cek validitas ptk_id dan hak akses
+        if (!empty($ptk_id) AND Yii::$app->session->get('kode_akses') == 0) {
+            $ptk = Ptk::findOne($ptk_id);
+            if (!$ptk) {
+                Yii::$app->session->setFlash('error', 'Data PTK tidak ditemukan.');
+                return $this->redirect(['index']);
+            }
+        
+            // Gunakan transaksi untuk keamanan
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if ($ptk->delete() !== false) {
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', 'Data PTK berhasil dihapus.');
+                } else {
+                    $transaction->rollBack();
+                    Yii::$app->session->setFlash('error', 'Gagal menghapus data PTK.');
+                }
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            }
+        
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error', 'Maaf akses anda ditolak. Terima kasih.');
+            return $this->redirect(['index']);
+        }
+    }
     
     private function generateUuid()
     {
