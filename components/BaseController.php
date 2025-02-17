@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use app\models\Akun;
+use app\models\LogAktivitasTerpadu;
 
 class BaseController extends Controller
 {
@@ -27,5 +28,27 @@ class BaseController extends Controller
         }
 
         return parent::beforeAction($action);
+    }
+    
+    public function saveLogAktivitasTerpadu($action)
+    {
+        // Ambil ID akun dari session
+        $idAkun = Yii::$app->session->get('id_akun');
+        
+        // Jika id_akun tidak ditemukan, kembalikan false
+        if (!$idAkun) {
+            return false;
+        }
+        
+        // Buat objek model untuk log aktivitas
+        $log = new LogAktivitasTerpadu();
+        
+        // Isi data log aktivitas
+        $log->id_akun = $idAkun;
+        $log->action = $action;
+        $log->created_at = time(); // Menyimpan waktu sekarang
+        
+        // Simpan log ke database
+        return $log->save();
     }
 }

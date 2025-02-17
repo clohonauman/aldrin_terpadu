@@ -35,14 +35,17 @@ class SekolahController extends BaseController
             }
     
             $data = $query->all();
+            $this->saveLogAktivitasTerpadu('GET: Sekolah');
             return $this->render('index', ['data' => $data]);
         } else {
             $query->andWhere(['sekolah.npsn' => $npsn]);
     
             $data = $query->one();
             if(!empty($data)){
+                $this->saveLogAktivitasTerpadu('GET: Sekolah ('.$npsn.')');
                 return $this->render('detail', ['data' => $data]);
             }else{
+                $this->saveLogAktivitasTerpadu('GET: Sekolah (404-'.$npsn.')');
                 Yii::$app->session->setFlash('error', 'Maaf data tidak ditemukan. Terima kasih.');
                 return $this->redirect(['index']);
             }
@@ -145,8 +148,10 @@ class SekolahController extends BaseController
         $sekolah->data_status = $postData['data_status'] ?? $sekolah->cabang_kcp_unit;
     
         if ($sekolah->save(false)) {
+            $this->saveLogAktivitasTerpadu('PATCH: Sekolah ('. $npsn.')');
             Yii::$app->session->setFlash('success', 'Data berhasil disimpan.');
         } else {
+            $this->saveLogAktivitasTerpadu('PATCH: Sekolah (500-'. $npsn.')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     
@@ -193,8 +198,10 @@ class SekolahController extends BaseController
         $sekolah->updatedAt = date('Y-m-d H:i:s');
     
         if ($sekolah->save(false)) {
+            $this->saveLogAktivitasTerpadu('POST: Sekolah ('. $npsn.')');
             Yii::$app->session->setFlash('success', 'Data berhasil disimpan.');
         } else {
+            $this->saveLogAktivitasTerpadu('POST: Sekolah (500-'. $npsn.')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
         }
     

@@ -130,6 +130,7 @@ class AkgController extends BaseController
             $data[] = $mapelData;
         }
 
+        $this->saveLogAktivitasTerpadu('GET: AKG');
         return $this->render('index', [
             'data' => $data
         ]);

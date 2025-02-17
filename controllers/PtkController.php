@@ -64,6 +64,7 @@ class PtkController extends BaseController
             }
     
             $data = $query->all();
+            $this->saveLogAktivitasTerpadu('GET: PTK');
             return $this->render('index', ['data' => $data]);
         } else {
             // Filter berdasarkan ptk_id
@@ -76,6 +77,7 @@ class PtkController extends BaseController
             
             $data = $query->one(); // Menggunakan `one()` karena detail seharusnya hanya satu data
     
+            $this->saveLogAktivitasTerpadu('GET: PTK ('.$ptk_id.')');
             return $this->render('detail', ['data' => $data]);
         }
     }
@@ -182,8 +184,10 @@ class PtkController extends BaseController
         }
         $totalSuccess=$totalData-$totalSkip;
         if($totalSkip>0){
+            $this->saveLogAktivitasTerpadu('POST: PTK using Excel File');
             Yii::$app->session->setFlash('danger', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess.'<br>Gagal: '.$totalSkip.' karena NIK sudah terdaftar/PTK Non Induk.');
         }else{
+            $this->saveLogAktivitasTerpadu('POST: PTK using Excel File');
             Yii::$app->session->setFlash('success', 'Total Data: '.$totalData.'<br>Berhasil: '.$totalSuccess);
         }
         return $this->redirect(['index']);
@@ -220,9 +224,11 @@ class PtkController extends BaseController
         $ptk->pangkat_golongan = $postData['pangkat_golongan'] ?? null;
     
         if ($ptk->save(false)) {
+            $this->saveLogAktivitasTerpadu('POST: PTK ('.$ptk->ptk_id.')');
             Yii::$app->session->setFlash('success', 'Data berhasil ditambahkan secara manual.');
             return $this->redirect(['index']);
         } else {
+            $this->saveLogAktivitasTerpadu('POST: PTK (500-'.$ptk->ptk_id.')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
             return $this->redirect(['upload']);
         }
@@ -273,8 +279,10 @@ class PtkController extends BaseController
         $ptk->data_status = $postData['data_status'] ?? $ptk->data_status;
     
         if ($ptk->save()) {
+            $this->saveLogAktivitasTerpadu('PATCH: PTK ('.$ptk_id.')');
             Yii::$app->session->setFlash('success', 'Data berhasil diperbarui.');
         } else {
+            $this->saveLogAktivitasTerpadu('PATCH: PTK (500-'.$ptk_id.')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
         }
         
@@ -299,13 +307,16 @@ class PtkController extends BaseController
             try {
                 if ($ptk->delete() !== false) {
                     $transaction->commit();
+                    $this->saveLogAktivitasTerpadu('DELETE: PTK ('.$ptk_id.')');
                     Yii::$app->session->setFlash('success', 'Data PTK berhasil dihapus.');
                 } else {
+                    $this->saveLogAktivitasTerpadu('DELETE: PTK (500-'.$ptk_id.')');
                     $transaction->rollBack();
                     Yii::$app->session->setFlash('error', 'Gagal menghapus data PTK.');
                 }
             } catch (\Exception $e) {
                 $transaction->rollBack();
+                $this->saveLogAktivitasTerpadu('DELETE: PTK ('.$ptk_id.')-'.$e->getMessage());
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
             }
         

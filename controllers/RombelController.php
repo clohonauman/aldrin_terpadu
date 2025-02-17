@@ -75,14 +75,17 @@ class RombelController extends BaseController
                 $query->andWhere(['sekolah.npsn' => Yii::$app->session->get('id_sekolah')]);
             }
             $data = $query->all();
+            $this->saveLogAktivitasTerpadu('GET: Rombongan Belajar');
             return $this->render('index', ['data' => $data]);
         } else {
             $query->andWhere(['rombongan_belajar.rombongan_belajar_id' => $rombongan_belajar_id]);
     
             $data = $query->one(); // Menggunakan `one()` karena detail seharusnya hanya satu data
     
+            $this->saveLogAktivitasTerpadu('GET: Rombongan Belajar ('.$rombongan_belajar_id.')');
             return $this->render('detail', ['data' => $data]);
         }
+        $this->saveLogAktivitasTerpadu('GET: Rombongan Belajar');
         return $this->render('index');
     }
 
@@ -125,12 +128,15 @@ class RombelController extends BaseController
             // Hapus data rombongan_belajar setelah data pembelajaran dihapus
             if ($rombel->delete() !== false) {
                 $transaction->commit();
+                $this->saveLogAktivitasTerpadu('DELETE: Rombongan Belajar ('.$rombongan_belajar_id.')');
                 Yii::$app->session->setFlash('success', 'Data Rombel dan pembelajaran terkait berhasil dihapus.');
             } else {
+                $this->saveLogAktivitasTerpadu('DELETE: Rombongan Belajar (500-'.$rombongan_belajar_id.')');
                 $transaction->rollBack();
                 Yii::$app->session->setFlash('error', 'Gagal menghapus data Rombel.');
             }
         } catch (\Exception $e) {
+            $this->saveLogAktivitasTerpadu('DELETE: Rombongan Belajar ('.$e->getMessage().')');
             $transaction->rollBack();
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -162,11 +168,14 @@ class RombelController extends BaseController
             ])->execute();
         
             if ($inserted) {
+                $this->saveLogAktivitasTerpadu('POST: Rombongan Belajar');
                 Yii::$app->session->setFlash('success', 'Data berhasil ditambahkan.');
             } else {
+                $this->saveLogAktivitasTerpadu('POST: Rombongan Belajar (500)');
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
             }
         } catch (\Exception $e) {
+            $this->saveLogAktivitasTerpadu('POST: Rombongan Belajar ('. $e->getMessage().')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
         return $this->redirect(['index']);              

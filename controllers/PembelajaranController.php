@@ -43,8 +43,10 @@ class PembelajaranController extends BaseController
                     $query->andWhere(['sekolah.kecamatan' => Yii::$app->request->get('kecamatan')]);
                 }
             $data = $query->all();
+            $this->saveLogAktivitasTerpadu('GET: Pembelajaran');
             return $this->render('index', ['data' => $data]);
         } catch (\Exception $e) {
+            $this->saveLogAktivitasTerpadu('GET: Pembelajaran ('.$e->getMessage().')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
             return $this->redirect(['index']);
         }
@@ -55,7 +57,6 @@ class PembelajaranController extends BaseController
         $model = new Pembelajaran();
         if (Yii::$app->request->isPost) {
             $postData = Yii::$app->request->post('Pembelajaran');
-            var_dump($postData);
             return $this->importManual($postData);
         } else {
             return $this->render('insert', ['model' => $model]);
@@ -85,6 +86,7 @@ class PembelajaranController extends BaseController
         try {
             if ($pembelajaran->delete() !== false) {
                 $transaction->commit();
+                $this->saveLogAktivitasTerpadu('DELETE: Pembelajaran ('.$pembelajaran_id.')');
                 Yii::$app->session->setFlash('success', 'Data pembelajaran berhasil dihapus.');
             } else {
                 $transaction->rollBack();
@@ -132,11 +134,14 @@ class PembelajaranController extends BaseController
             $model->created_at = time();
             $model->updated_at = time();
             if ($model->save()) {
+                $this->saveLogAktivitasTerpadu('POST: Pembelajaran ('.$model->$pembelajaran_id.')');
                 Yii::$app->session->setFlash('success', 'Data pembelajaran berhasil ditambahkan.');
             } else {
+                $this->saveLogAktivitasTerpadu('POST: Pembelajaran (500)');
                 Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
             }
         } catch (\Exception $e) {
+            $this->saveLogAktivitasTerpadu('POST: Pembelajaran ('.$e->getMessage().')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
         return $this->redirect(['index']);

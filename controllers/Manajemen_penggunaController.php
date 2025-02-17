@@ -7,6 +7,7 @@ class Manajemen_penggunaController extends BaseController
 {
     public function actionIndex()
     {
+        $this->saveLogAktivitasTerpadu('GET: Manajemen Pengguna');
         return $this->render('index');
     }
 

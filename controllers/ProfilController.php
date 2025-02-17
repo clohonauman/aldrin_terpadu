@@ -21,6 +21,7 @@ class ProfilController extends BaseController
             ->asArray()
             ->one();
 
+        $this->saveLogAktivitasTerpadu('GET: Pengaturan Profil');
         return $this->render('index', [
             'data' => $data
         ]);
@@ -82,8 +83,10 @@ class ProfilController extends BaseController
                             : $akun->kata_sandi;
     
         if ($akun->save()) {
+            $this->saveLogAktivitasTerpadu('PATCH: Profil Pengguna');
             Yii::$app->session->setFlash('success', 'Data berhasil diperbarui.');
         } else {
+            $this->saveLogAktivitasTerpadu('PATCH: Profil Pengguna (500)');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
         }
         
