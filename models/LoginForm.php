@@ -27,7 +27,9 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !Yii::$app->security->validatePassword($this->kata_sandi, $user->kata_sandi)) {
+
+            // Check if user exists and validate the password
+            if (!$user || !Yii::$app->security->validatePassword($this->kata_sandi, $user['kata_sandi'])) {
                 $this->addError($attribute, 'Nama pengguna atau kata sandi salah.');
             }
         }
@@ -37,38 +39,51 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             $user = $this->getUser();
+            if ($user && Yii::$app->session->has('id_akun')) {
+                return true;
+            }
             $session = Yii::$app->session;
             $session->open();
 
-            $session->set('id_akun', $user->id_akun);
-            $session->set('nama_lengkap', $user->nama_lengkap);
-            $session->set('kode_akses', $user->peran->kode_akses);
-            $session->set('id_sekolah', $user->peran->id_sekolah);
-            $kode_akses = $session->get('kode_akses');
-
+            $session->set('id_akun', $user['id_akun']);
+            $session->set('nama_lengkap', $user['nama_lengkap']);
+            $session->set('id_sekolah', $user['id_sekolah']);
+    
+            $kode_akses = $user['kode_akses'];
+    
             if (!in_array($kode_akses, [0, 2, 3])) {
-                $session->destroy();
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, base_url('/login/logout'));
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_exec($ch);
-                curl_close($ch);
-            
-                return redirect()->to('/login');
+                Yii::$app->session->destroy();
+                return Yii::$app->response->redirect(Yii::$app->urlManager->createUrl('/login/logout'));
             }
-            
-
+    
+            $session->set('kode_akses', $kode_akses);
+    
             return true;
         }
         return false;
-    }
+    }       
 
-    protected function getUser()
+    protected function getUser($conditions = [])
     {
         if ($this->_user === false) {
-            $this->_user = Akun::find()->where(['nama_pengguna' => $this->nama_pengguna])->where(['status' => 'aktif'])->with('peran')->one();
+            $sql = 'SELECT * FROM akun a INNER JOIN peran p ON a.id_akun = p.id_akun WHERE a.nama_pengguna = :nama_pengguna AND a.status = :status AND p.kode_akses IN (0,2,3) ORDER BY p.kode_akses ASC';
+            $params = [
+                ':nama_pengguna' => $this->nama_pengguna,
+                ':status' => 'aktif'
+            ];
+            if (!empty($conditions)) {
+                foreach ($conditions as $key => $value) {
+                    $sql .= ' AND ' . $key . ' = :' . $key;
+                    $params[':' . $key] = $value;
+                }
+            }
+            $command = Yii::$app->db->createCommand($sql, $params);
+            $result = $command->queryOne();
+            if ($result) {
+                $this->_user = $result;
+            }
         }
+    
         return $this->_user;
     }
 }
