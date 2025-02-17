@@ -132,6 +132,20 @@ foreach ($akreditasiList as $akreditasi) {
                                 <?= $form->field($model, 'rekening_atas_nama')->textInput()->label('Rekening Atas Nama <span class="text-danger">*</span>') ?>
                                 <?= $form->field($model, 'nama_bank')->textInput()->label('Nama Bank <span class="text-danger">*</span>') ?>
                                 <?= $form->field($model, 'cabang_kcp_unit')->textInput()->label('Nama Cabang/KCP/Unit <span class="text-danger">*</span>') ?>
+                                <?= $form->field($model, 'data_status')->widget(Select2::classname(), [
+                                    'data' => [
+                                                    0=>'Aktif',
+                                                    1=>'Tutup',
+                                                    2=>'Hapus Permanen'
+                                                ],
+                                    'options' => [
+                                        'placeholder' => '- Pilih Status Sekolah -',
+                                        'value' => 0
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label('Status Keaktivan Sekolah <span class="text-danger">*</span>'); ?>
                             </div>
                             <hr>
                             <div class="form-group">

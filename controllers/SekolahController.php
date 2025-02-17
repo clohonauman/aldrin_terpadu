@@ -15,11 +15,10 @@ class SekolahController extends BaseController
         $npsn = \yii\helpers\Html::encode($npsn); // Mencegah XSS
     
         $query = (new \yii\db\Query())
-            ->select([
-                'sekolah.*'
-            ])
-            ->from('sekolah')
-            ->orderby('nama', 'asc');
+                    ->select(['sekolah.*'])
+                    ->from('sekolah')
+                    ->orderby('nama', 'asc')
+                    ->andWhere(['or', ['!=', 'data_status', 2], ['is', 'data_status', null], ['=', 'data_status', 1]]);    
     
         if (Yii::$app->session->get('kode_akses')==3) {
             $query->andWhere(['sekolah.npsn' => Yii::$app->session->get('id_sekolah')]);
@@ -143,6 +142,7 @@ class SekolahController extends BaseController
         $sekolah->rekening_atas_nama = $postData['rekening_atas_nama'] ?? $sekolah->rekening_atas_nama;
         $sekolah->nama_bank = $postData['nama_bank'] ?? $sekolah->nama_bank;
         $sekolah->cabang_kcp_unit = $postData['cabang_kcp_unit'] ?? $sekolah->cabang_kcp_unit;
+        $sekolah->data_status = $postData['data_status'] ?? $sekolah->cabang_kcp_unit;
     
         if ($sekolah->save(false)) {
             Yii::$app->session->setFlash('success', 'Data berhasil disimpan.');
@@ -188,6 +188,7 @@ class SekolahController extends BaseController
         $sekolah->rekening_atas_nama = $postData['rekening_atas_nama'] ?? null;
         $sekolah->nama_bank = $postData['nama_bank'] ?? null;
         $sekolah->cabang_kcp_unit = $postData['cabang_kcp_unit'] ?? null;
+        $sekolah->data_status = $postData['data_status'] ?? 0;
         $sekolah->createdAt = date('Y-m-d H:i:s');
         $sekolah->updatedAt = date('Y-m-d H:i:s');
     

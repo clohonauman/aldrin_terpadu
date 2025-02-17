@@ -98,32 +98,40 @@ $statusList = Yii::$app->db->createCommand("SELECT DISTINCT status_sekolah FROM 
                 <table id="myTable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>NO</th>
-                            <th>SEKOLAH</th>
-                            <th>BENTUK PENDIDIKAN</th>
-                            <th>STATUS SEKOLAH</th>
-                            <th>KECAMATAN</th>
-                            <th>AKSI</th>
+                            <th class="text-center">NO</th>
+                            <th class="text-center">SEKOLAH</th>
+                            <th class="text-center">BENTUK PENDIDIKAN</th>
+                            <th class="text-center">STATUS SEKOLAH</th>
+                            <th class="text-center">KECAMATAN</th>
+                            <th class="text-center">STATUS KEAKTIFAN</th>
+                            <th class="text-center">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                             $no=0; 
-                            foreach ($data as $ptk): 
+                            foreach ($data as $sekolah): 
                             $no++;
                             ?>
                             <tr>
-                                <td><?= htmlspecialchars($no) ?></td>
-                                <td><?= htmlspecialchars($ptk['nama']) ?></td>
-                                <td><?= htmlspecialchars($ptk['bentuk_pendidikan']) ?></td>
-                                <td><?= htmlspecialchars($ptk['status_sekolah']) ?></td>
-                                <td><?= htmlspecialchars($ptk['kecamatan']) ?></td>
+                                <td class="text-center"><?= htmlspecialchars($no) ?></td>
+                                <td class="text-left"><?= htmlspecialchars($sekolah['nama']) ?></td>
+                                <td class="text-center"><?= htmlspecialchars($sekolah['bentuk_pendidikan']) ?></td>
+                                <td class="text-center"><?= htmlspecialchars($sekolah['status_sekolah']) ?></td>
+                                <td class="text-center"><?= htmlspecialchars($sekolah['kecamatan']) ?></td>
+                                <td class="text-center">
+                                    <?= htmlspecialchars(
+                                        ($sekolah['data_status'] === null || $sekolah['data_status'] == 0) ? 'Aktif' :
+                                        ($sekolah['data_status'] == 1 ? 'Tutup' : 'Hapus Permanen')
+                                    ) ?>
+                                </td>
+
                                 <td>
-                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('sekolah?id='.htmlspecialchars($ptk['npsn'])) ?>"><i class="fa fa-eye"></i></a>
+                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('sekolah?id='.htmlspecialchars($sekolah['npsn'])) ?>"><i class="fa fa-eye"></i></a>
                                     <?php
                                     if(Yii::$app->session->get('kode_akses')!=3){
                                         ?>
-                                        <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('sekolah/edit?id='.htmlspecialchars($ptk['npsn'])) ?>"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('sekolah/edit?id='.htmlspecialchars($sekolah['npsn'])) ?>"><i class="fa fa-edit"></i></a>
                                         <?php
                                     }
                                     ?>
