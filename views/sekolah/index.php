@@ -88,7 +88,7 @@ $statusList = Yii::$app->db->createCommand("SELECT DISTINCT status_sekolah FROM 
                     <h4><i class="fa fa-school"></i> DAFTAR SEKOLAH</h4>
                 </div>
                 <div class="col-md-6 text-right">
-                    <a href="<?= Yii::$app->urlManager->createUrl(['/sekolah/upload']) ?>" class="btn btn-primary">
+                    <a href="<?= Yii::$app->urlManager->createUrl(['/sekolah/insert']) ?>" class="btn btn-primary">
                         <i class="fa fa-plus"></i> DATA
                     </a>
                 </div>
@@ -99,7 +99,6 @@ $statusList = Yii::$app->db->createCommand("SELECT DISTINCT status_sekolah FROM 
                     <thead>
                         <tr>
                             <th>NO</th>
-
                             <th>SEKOLAH</th>
                             <th>BENTUK PENDIDIKAN</th>
                             <th>STATUS SEKOLAH</th>
@@ -119,7 +118,16 @@ $statusList = Yii::$app->db->createCommand("SELECT DISTINCT status_sekolah FROM 
                                 <td><?= htmlspecialchars($ptk['bentuk_pendidikan']) ?></td>
                                 <td><?= htmlspecialchars($ptk['status_sekolah']) ?></td>
                                 <td><?= htmlspecialchars($ptk['kecamatan']) ?></td>
-                                <td><a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('sekolah?id='.htmlspecialchars($ptk['npsn'])) ?>"><i class="fa fa-eye"></i></a></td>
+                                <td>
+                                    <a class="btn btn-primary" href="<?= Yii::$app->urlManager->createUrl('sekolah?id='.htmlspecialchars($ptk['npsn'])) ?>"><i class="fa fa-eye"></i></a>
+                                    <?php
+                                    if(Yii::$app->session->get('kode_akses')!=3){
+                                        ?>
+                                        <a class="btn btn-warning" href="<?= Yii::$app->urlManager->createUrl('sekolah/edit?id='.htmlspecialchars($ptk['npsn'])) ?>"><i class="fa fa-edit"></i></a>
+                                        <?php
+                                    }
+                                    ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

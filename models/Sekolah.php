@@ -102,21 +102,34 @@ class Sekolah extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sekolah_id', 'npsn', 'createdAt', 'updatedAt'], 'required'],
+            [['sekolah_id', 'npsn', 'createdAt', 'updatedAt', 'bentuk_pendidikan_id', 'rt', 'rw', 'kebutuhan_khusus_id', 'status_kepemilikan_id', 'mbs', 'luas_tanah_milik', 'luas_tanah_bukan_milik', 'daya_listrik', 'jarak_listrik', 'waktu_penyelenggaraan_id', 'sumber_listrik_id', 'sertifikasi_iso_id', 'akses_internet_id', 'akses_internet_2_id', 'data_status', 'lintang', 'bujur', 'semester_id', 'flag', 'nama', 'nama_nomenklatur', 'nss', 'bentuk_pendidikan', 'alamat_jalan', 'nama_dusun', 'kode_wilayah', 'kode_desa_kelurahan', 'desa_kelurahan', 'kecamatan', 'kabupaten', 'provinsi', 'nomor_telepon', 'nomor_fax', 'email', 'kebutuhan_khusus', 'status_sekolah_id', 'status_sekolah', 'sk_pendirian_sekolah', 'tanggal_sk_pendirian', 'status_kepemilikan', 'yayasan_id', 'sk_izin_operasional', 'tanggal_sk_izin_operasional', 'no_rekening', 'nama_bank', 'cabang_kcp_unit', 'rekening_atas_nama', 'kode_registrasi', 'nm_wp', 'waktu_penyelenggaraan', 'sumber_listrik', 'sertifikasi_iso', 'akses_internet', 'akses_internet_2', 'akreditasi', 'create_date', 'last_update', 'kode_pos', 'npwp', 'keaktifan', 'kontinuitas_listrik', 'wilayah_terpencil', 'wilayah_perbatasan', 'wilayah_transmigrasi', 'wilayah_adat_terpencil', 'wilayah_bencana_alam', 'wilayah_bencana_sosial', 'partisipasi_bos'], 
+                'required', 'message' => '* {attribute} wajib diisi.'],
             [['bentuk_pendidikan_id', 'rt', 'rw', 'kebutuhan_khusus_id', 'status_kepemilikan_id', 'mbs', 'luas_tanah_milik', 'luas_tanah_bukan_milik', 'daya_listrik', 'jarak_listrik', 'waktu_penyelenggaraan_id', 'sumber_listrik_id', 'sertifikasi_iso_id', 'akses_internet_id', 'akses_internet_2_id', 'data_status'], 'integer'],
+    
             [['lintang', 'bujur'], 'number'],
+    
             [['createdAt', 'updatedAt'], 'safe'],
+    
             [['sekolah_id'], 'string', 'max' => 36],
+    
             [['semester_id', 'flag'], 'string', 'max' => 5],
+    
             [['nama', 'nama_nomenklatur', 'nss', 'bentuk_pendidikan', 'alamat_jalan', 'nama_dusun', 'kode_wilayah', 'kode_desa_kelurahan', 'desa_kelurahan', 'kecamatan', 'kabupaten', 'provinsi', 'nomor_telepon', 'nomor_fax', 'email', 'website', 'kebutuhan_khusus', 'status_sekolah_id', 'status_sekolah', 'sk_pendirian_sekolah', 'tanggal_sk_pendirian', 'status_kepemilikan', 'yayasan_id', 'yayasan', 'sk_izin_operasional', 'tanggal_sk_izin_operasional', 'no_rekening', 'nama_bank', 'cabang_kcp_unit', 'rekening_atas_nama', 'kode_registrasi', 'nm_wp', 'waktu_penyelenggaraan', 'sumber_listrik', 'sertifikasi_iso', 'akses_internet', 'akses_internet_2', 'akreditasi', 'create_date', 'last_update'], 'string', 'max' => 255],
-            [['npsn', 'kode_kecamatan', 'kode_kabupaten', 'kode_provinsi'], 'string', 'max' => 8],
+    
+            [['npsn', 'kode_kecamatan', 'kode_kabupaten', 'kode_provinsi'], 'string', 'max' => 10],
+    
             [['kode_pos'], 'string', 'max' => 6],
+    
             [['npwp'], 'string', 'max' => 30],
+    
             [['keaktifan', 'kontinuitas_listrik'], 'string', 'max' => 3],
+    
             [['wilayah_terpencil', 'wilayah_perbatasan', 'wilayah_transmigrasi', 'wilayah_adat_terpencil', 'wilayah_bencana_alam', 'wilayah_bencana_sosial', 'partisipasi_bos'], 'string', 'max' => 1],
-            [['sekolah_id'], 'unique'],
+    
+            [['sekolah_id'], 'unique', 'message' => '* {attribute} sudah digunakan.'],
         ];
     }
+    
 
     /**
      * {@inheritdoc}
@@ -126,10 +139,10 @@ class Sekolah extends \yii\db\ActiveRecord
         return [
             'sekolah_id' => 'Sekolah ID',
             'semester_id' => 'Semester ID',
-            'nama' => 'Nama',
+            'nama' => 'Nama Sekolah',
             'nama_nomenklatur' => 'Nama Nomenklatur',
             'nss' => 'Nss',
-            'npsn' => 'Npsn',
+            'npsn' => 'NPSN',
             'bentuk_pendidikan_id' => 'Bentuk Pendidikan ID',
             'bentuk_pendidikan' => 'Bentuk Pendidikan',
             'alamat_jalan' => 'Alamat Jalan',
