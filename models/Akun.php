@@ -58,6 +58,6 @@ class Akun extends \yii\db\ActiveRecord
 
     public function getPeran()
     {
-        return $this->hasOne(Peran::className(), ['id_akun' => 'id_akun']);
-    }    
+        return $this->hasOne(Peran::className(), ['id_akun' => 'id_akun'])->orderBy(['kode_akses' => SORT_ASC]);
+    }
 }
