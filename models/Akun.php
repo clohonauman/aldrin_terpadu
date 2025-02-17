@@ -55,9 +55,4 @@ class Akun extends \yii\db\ActiveRecord
             'email' => 'Email',
         ];
     }
-
-    public function getPeran()
-    {
-        return $this->hasOne(Peran::className(), ['id_akun' => 'id_akun']);
-    }    
 }
