@@ -15,6 +15,7 @@ class MapelController extends BaseController
         ])->from('mata_pelajaran');
         $data = $queryMapel->all();
 
+        $this->saveLogAktivitasTerpadu('GET: Mata Pelajaran');
         return $this->render('index', [
             'data' => $data
         ]);
@@ -23,6 +24,7 @@ class MapelController extends BaseController
     {
         $model = new MataPelajaran();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->saveLogAktivitasTerpadu('POST: Mata Pelajaran');
             Yii::$app->session->setFlash('success', 'Mata Pelajaran berhasil disimpan!');
             return $this->redirect(['index']); // Redirect ke halaman daftar mata pelajaran
         }
@@ -38,6 +40,7 @@ class MapelController extends BaseController
             throw new \yii\web\NotFoundHttpException('Data tidak ditemukan.');
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->saveLogAktivitasTerpadu('PATCH: Mata Pelajaran ('.$id.')');
             Yii::$app->session->setFlash('success', 'Data berhasil diperbarui.');
             return $this->redirect(['index']); // Redirect ke halaman daftar mata pelajaran
         }
@@ -52,6 +55,7 @@ class MapelController extends BaseController
         }
         if (Yii::$app->request->isPost) {
             $mapel->delete();
+            $this->saveLogAktivitasTerpadu('DELETE: Mata Pelajaran ('.$id.')');
             Yii::$app->session->setFlash('success', 'Data berhasil dihapus.');
             return $this->redirect(['index']);
         }
