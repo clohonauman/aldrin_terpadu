@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
+use app\models\Session;
 
 class LoginController extends Controller
 {
@@ -25,10 +26,14 @@ class LoginController extends Controller
             'model' => $model,
         ]);
     }
+
     public function actionLogout()
     {
-        Yii::$app->session->removeAll(); // Hapus semua session yang tersimpan
-        return $this->redirect(['/']); // Redirect ke halaman utama
+        $session = Yii::$app->session;
+        $idAkun = $session->get('id_akun');
+        $token = $session->get('token');
+        Session::deleteAll(['id_akun' => $idAkun, 'token' => $token]);
+        $session->removeAll();
+        return $this->redirect(['/']);
     }
-    
 }

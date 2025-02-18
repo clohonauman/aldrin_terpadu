@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use app\models\Akun;
 use yii\web\Session;
 
 class LoginForm extends Model
@@ -16,8 +15,7 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [['nama_pengguna'], 'required', 'message' => '* Nama pengguna wajib diisi.'],
-            [['kata_sandi'], 'required', 'message' => '* Kata sandi wajib diisi.'],
+            [['nama_pengguna', 'kata_sandi'], 'required', 'message' => '* Wajib diisi.'],
             ['nama_pengguna', 'string', 'max' => 50],
             ['kata_sandi', 'validatePassword'],
         ];
@@ -27,8 +25,6 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-
-            // Check if user exists and validate the password
             if (!$user || !Yii::$app->security->validatePassword($this->kata_sandi, $user['kata_sandi'])) {
                 $this->addError($attribute, 'Nama pengguna atau kata sandi salah.');
             }
@@ -39,29 +35,49 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             $user = $this->getUser();
-            if ($user && Yii::$app->session->has('id_akun')) {
-                return true;
-            }
+            
             $session = Yii::$app->session;
             $session->open();
-
-            $session->set('id_akun', $user['id_akun']);
-            $session->set('nama_lengkap', $user['nama_lengkap']);
-            $session->set('id_sekolah', $user['id_sekolah']);
-    
-            $kode_akses = $user['kode_akses'];
-    
-            if (!in_array($kode_akses, [0, 2, 3])) {
+            
+            $sessionDataInsert = [
+                'id_akun' => $user['id_akun'],
+                'app_id' => 'ALDRIN_TERPADU-01234',
+                'ip_address' => Yii::$app->request->userIP,
+                'device_type' => $this->getDeviceType(),
+                'browser_info' => Yii::$app->request->userAgent,
+                'device_id' => $this->getDeviceId(),
+                'token' => Yii::$app->security->generateRandomString(50),
+                'refresh_token' => Yii::$app->security->generateRandomString(50),
+                'kode_akses' => $user['kode_akses'],
+                'waktu' => time()
+            ];
+            $sessionData = [
+                'id_akun' => $sessionDataInsert['id_akun'],
+                'nama_lengkap' => $user['nama_lengkap'],
+                'id_sekolah' => $user['id_sekolah'],
+                'app_id' => 'ALDRIN_TERPADU-01234',
+                'ip_address' => Yii::$app->request->userIP,
+                'device_type' => $this->getDeviceType(),
+                'browser_info' => Yii::$app->request->userAgent,
+                'device_id' => $this->getDeviceId(),
+                'token' => $sessionDataInsert['token'],
+                'refresh_token' => $sessionDataInsert['refresh_token'],
+                'kode_akses' => $user['kode_akses'],
+                'waktu' => time()
+            ];
+            foreach ($sessionData as $key => $value) {
+                $session->set($key, $value);
+            }
+            Yii::$app->db->createCommand()->insert('session', $sessionDataInsert)->execute();
+            
+            if (!in_array($user['kode_akses'], [0, 2, 3])) {
                 Yii::$app->session->destroy();
                 return Yii::$app->response->redirect(Yii::$app->urlManager->createUrl('/login/logout'));
             }
-    
-            $session->set('kode_akses', $kode_akses);
-    
             return true;
         }
         return false;
-    }       
+    }
 
     protected function getUser($conditions = [])
     {
@@ -77,13 +93,24 @@ class LoginForm extends Model
                     $params[':' . $key] = $value;
                 }
             }
-            $command = Yii::$app->db->createCommand($sql, $params);
-            $result = $command->queryOne();
-            if ($result) {
-                $this->_user = $result;
-            }
+            $this->_user = Yii::$app->db->createCommand($sql, $params)->queryOne();
         }
-    
         return $this->_user;
+    }
+
+    private function getDeviceType()
+    {
+        $userAgent = Yii::$app->request->userAgent;
+        if (preg_match('/mobile/i', $userAgent)) {
+            return 'Mobile';
+        } elseif (preg_match('/tablet/i', $userAgent)) {
+            return 'Tablet';
+        }
+        return 'Desktop';
+    }
+
+    private function getDeviceId()
+    {
+        return md5(Yii::$app->request->userIP . Yii::$app->request->userAgent);
     }
 }
