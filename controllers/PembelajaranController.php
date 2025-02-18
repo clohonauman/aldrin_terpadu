@@ -121,7 +121,8 @@ class PembelajaranController extends BaseController
 
         try {
             $model = new Pembelajaran();
-            $model->pembelajaran_id = $this->generateUuid();
+            $pembelajaran_id = $this->generateUuid();
+            $model->pembelajaran_id = $pembelajaran_id;
             $model->sekolah_id = Yii::$app->session->get('id_sekolah');
             $model->rombongan_belajar_id = $postData['rombongan_belajar_id'];
             $model->ptk_id = $postData['ptk_id'];
@@ -134,7 +135,7 @@ class PembelajaranController extends BaseController
             $model->created_at = time();
             $model->updated_at = time();
             if ($model->save()) {
-                $this->saveLogAktivitasTerpadu('POST: Pembelajaran ('.$model->$pembelajaran_id.')');
+                $this->saveLogAktivitasTerpadu('POST: Pembelajaran ('.$pembelajaran_id.')');
                 Yii::$app->session->setFlash('success', 'Data pembelajaran berhasil ditambahkan.');
             } else {
                 $this->saveLogAktivitasTerpadu('POST: Pembelajaran (500)');

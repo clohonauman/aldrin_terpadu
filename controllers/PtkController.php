@@ -201,7 +201,8 @@ class PtkController extends BaseController
         }
     
         $ptk = new Ptk();
-        $ptk->ptk_id = $this->generateUuid(); // Tambahkan UUID sebagai ptk_id
+        $ptk_id = $this->generateUuid(); // Tambahkan UUID sebagai ptk_id
+        $ptk->ptk_id = $ptk_id; // Tambahkan UUID sebagai ptk_id
         $ptk->nama = $postData['nama'] ?? null;
         $ptk->nik = $postData['nik'] ?? null;
         $ptk->nuptk = isset($postData['nuptk']) ? trim($postData['nuptk']) : null;
@@ -224,11 +225,11 @@ class PtkController extends BaseController
         $ptk->pangkat_golongan = $postData['pangkat_golongan'] ?? null;
     
         if ($ptk->save(false)) {
-            $this->saveLogAktivitasTerpadu('POST: PTK ('.$ptk->ptk_id.')');
+            $this->saveLogAktivitasTerpadu('POST: PTK ('.$ptk_id.')');
             Yii::$app->session->setFlash('success', 'Data berhasil ditambahkan secara manual.');
             return $this->redirect(['index']);
         } else {
-            $this->saveLogAktivitasTerpadu('POST: PTK (500-'.$ptk->ptk_id.')');
+            $this->saveLogAktivitasTerpadu('POST: PTK (500-'.$ptk_id.')');
             Yii::$app->session->setFlash('error', 'Terjadi kesalahan saat menyimpan data.');
             return $this->redirect(['upload']);
         }
