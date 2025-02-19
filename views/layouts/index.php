@@ -31,6 +31,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu.png') no-repeat center center fixed;
                 background-size: cover;
             }
+            @media (max-width: 768px) {
+                body {
+                    background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu Mobile.png') no-repeat center center fixed;
+                    background-size: cover;
+                }
+            }
+
         </style>
     </head>
     <body class="hold-transition layout-top-nav">
