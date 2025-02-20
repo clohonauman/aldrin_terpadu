@@ -28,12 +28,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
         <style>
             body {
-                background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu.png') no-repeat center center fixed;
+                background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu.webp') no-repeat center center fixed;
                 background-size: cover;
             }
             @media (max-width: 768px) {
                 body {
-                    background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu Mobile.png') no-repeat center center fixed;
+                    background: url('<?= Yii::getAlias('@web') ?>/ALDRIN Terpadu Mobile.webp') no-repeat center center fixed;
                     background-size: cover;
                 }
             }
