@@ -50,7 +50,7 @@ $session->open();
                     <div class="card alert alert-default bg-white alert-dismissable">
                         <span id="jam"></span>
                         <p style="font-size:15px">
-                            Selamat datang <?= $session->get('nama_lengkap')?> di <?= getenv('APP_NAME') ?></strong>.
+                            Selamat datang <?= $session->get('nama_lengkap')?> di <?= $_ENV['APP_NAME'] ?></strong>.
                         </p>        
                     </div>
                 </div>
