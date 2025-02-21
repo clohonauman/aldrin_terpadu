@@ -194,7 +194,7 @@ $roles = [
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="<?= Yii::$app->urlManager->createUrl(['/login/logout']) ?>" class="nav-link">
+                                <a href="<?= Yii::$app->urlManager->createUrl(['/login/logout']) ?>" onclick="return confirm('Anda yakin ingin mengakhiri sesi saat ini?')" class="nav-link">
                                     <i class="nav-icon fas fa-sign-out"></i>
                                     <p>Keluar</p>
                                 </a>
