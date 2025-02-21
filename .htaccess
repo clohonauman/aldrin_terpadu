@@ -1,0 +1,11 @@
+# Blokir akses langsung ke folder sensitif
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(config|runtime|vendor|tests|\.git|\.env) - [R=404,L]
+</IfModule>
+
+# Blokir akses ke file sensitif
+<FilesMatch "(^\.|composer\.(json|lock)|README|LICENSE)">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
