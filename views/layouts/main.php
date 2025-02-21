@@ -82,7 +82,7 @@ $roles = [
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
     <head>
-        <title><?= Html::encode($this->title) ?> | <?= getenv('APP_NAME') ?></title>
+        <title><?= Html::encode($this->title) ?> | <?= $_ENV['APP_NAME'] ?></title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <?php $this->head() ?>
@@ -103,7 +103,7 @@ $roles = [
             <!-- Sidebar -->
             <aside class="main-sidebar sidebar-dark-primary elevation-5">
                 <a href="#" class="brand-link text-center text-decoration-none p-0">
-                    <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= getenv('APP_NAME') ?>">
+                    <img class="w-75 m-0 p-0" src="<?= Yii::getAlias('@web') ?>/app_logo.png" alt="<?= $_ENV['APP_NAME'] ?>">
                     <hr>
                     <p class="fst-italic fs-6 mt-0"><?= isset($roles[$kodeAkses]) ? $roles[$kodeAkses] : 'Tidak Diketahui'; ?></p>
                 </a>

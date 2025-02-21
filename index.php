@@ -18,5 +18,4 @@ function loadEnv($file)
     }
 }
 loadEnv(__DIR__ . '/.env');
-header('Location: ' . getenv('BASE_URL'));
-exit;
+header('Location: ' . $_ENV["BASE_URL"]);
