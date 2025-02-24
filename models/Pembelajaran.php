@@ -36,7 +36,7 @@ class Pembelajaran extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pembelajaran_id', 'created_at', 'updated_at','jam_mengajar_per_minggu','ptk_id','rombongan_belajar_id'], 'required', 'message' => '* {attribute} tidak boleh kosong.'],
+            [['pembelajaran_id', 'created_at', 'updated_at','jam_mengajar_per_minggu','ptk_id','rombongan_belajar_id', 'mata_pelajaran_id'], 'required', 'message' => '* {attribute} tidak boleh kosong.'],
             [['mata_pelajaran_id', 'jam_mengajar_per_minggu', 'created_at', 'updated_at'], 'integer'],
             [['pembelajaran_id', 'sekolah_id', 'rombongan_belajar_id', 'ptk_id'], 'string', 'max' => 36],
             [['semester', 'tanggal_sk_mengajar'], 'string', 'max' => 10],

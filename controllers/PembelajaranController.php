@@ -103,19 +103,17 @@ class PembelajaranController extends BaseController
     protected function importManual($postData)
     {
         if (
-            isset($postData['ptk']) && Pembelajaran::find()->where(['ptk_id' => $postData['ptk']])->andWhere(['rombongan_belajar_id'=>$postData['rombongan_belajar_id']])->exists()
+            isset($postData['ptk']) && Pembelajaran::find()->where(['ptk_id' => $postData['ptk']])->andWhere(['mata_pelajaran_id'=>$postData['mata_pelajaran_id']])->exists()
         ) {
-            Yii::$app->session->setFlash('error', 'Data pembelajaran untuk PTK dan Rombel ini sudah ada.');
+            Yii::$app->session->setFlash('error', 'Data pembelajaran untuk PTK dan mata pelajaran ini sudah ada.');
             return $this->redirect(['insert']);
         }
 
         $query = (new \yii\db\Query())
             ->select([
                 'rombongan_belajar.*',
-                'mata_pelajaran.mata_pelajaran',
             ])
             ->from('rombongan_belajar')
-            ->leftJoin('mata_pelajaran', 'mata_pelajaran.id = rombongan_belajar.mata_pelajaran_id')
             ->andWhere(['rombongan_belajar.rombongan_belajar_id'=>$postData['rombongan_belajar_id']]);
             $data = $query->one();
 
@@ -130,7 +128,7 @@ class PembelajaranController extends BaseController
             $model->tanggal_sk_mengajar = $postData['tanggal_sk_mengajar'] ?? null;
             $model->jam_mengajar_per_minggu = $postData['jam_mengajar_per_minggu'];
 
-            $model->mata_pelajaran_id = $data['mata_pelajaran_id'] ?? null;
+            $model->mata_pelajaran_id = $postData['mata_pelajaran_id'] ?? null;
             $model->semester = $data['semester'] ?? null;
             $model->created_at = time();
             $model->updated_at = time();

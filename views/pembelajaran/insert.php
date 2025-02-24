@@ -14,10 +14,15 @@ $dropdownDataPTK = [];
 foreach ($ptkList as $ptk) {
     $dropdownDataPTK[$ptk['ptk_id']] = $ptk['nama'] . ' | ' . $ptk['jabatan'];
 }
-$rombelList = Yii::$app->db->createCommand("SELECT rombongan_belajar.rombongan_belajar_id, rombongan_belajar.nama, rombongan_belajar.semester, mata_pelajaran.mata_pelajaran FROM rombongan_belajar INNER JOIN mata_pelajaran ON mata_pelajaran.id=rombongan_belajar.mata_pelajaran_id WHERE sekolah_id='$npsn' ORDER BY nama")->queryAll();
+$rombelList = Yii::$app->db->createCommand("SELECT * FROM rombongan_belajar WHERE sekolah_id='$npsn' ORDER BY nama")->queryAll();
 $dropdownDataRombel = [];
 foreach ($rombelList as $rombel) {
-    $dropdownDataRombel[$rombel['rombongan_belajar_id']] = $rombel['nama'] . ' | ' . $rombel['mata_pelajaran'] . ' | ' . $rombel['semester'];
+    $dropdownDataRombel[$rombel['rombongan_belajar_id']] = 'Kelas ' . $rombel['tingkat_pendidikan'] . ' | ' . $rombel['nama'] . ' | ' . $rombel['semester'];
+}
+$mapelList = Yii::$app->db->createCommand("SELECT * FROM mata_pelajaran ORDER BY mata_pelajaran")->queryAll();
+$dropdownDataMapel = [];
+foreach ($mapelList as $mapel) {
+    $dropdownDataMapel[$mapel['id']] = $mapel['mata_pelajaran'];
 }
 ?>
 <div class="card">
@@ -44,6 +49,15 @@ foreach ($rombelList as $rombel) {
                             'allowClear' => true
                         ],
                     ])->label('PTK <span class="text-danger">*</span>'); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'mata_pelajaran_id')->widget(Select2::classname(), [
+                        'data' => $dropdownDataMapel,
+                        'options' => ['placeholder' => '- Pilih Mapel -'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('Mata Pelajaran <span class="text-danger">*</span>'); ?>
                 </div>
                 <div class="col-md-6">
                     <?= $form->field($model, 'rombongan_belajar_id')->widget(Select2::classname(), [
